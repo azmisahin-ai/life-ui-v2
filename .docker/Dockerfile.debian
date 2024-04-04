@@ -99,9 +99,9 @@ WORKDIR $PROJECT_FOLDER
 
 # Install base packages
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    bash \
-    && rm -rf /var/lib/apt/lists/*
+  apt-get install -y --no-install-recommends \
+  bash \
+  && rm -rf /var/lib/apt/lists/*
 
 # Create the virtual environment
 
@@ -110,30 +110,52 @@ RUN apt-get update && \
 # Development stage
 FROM build AS development
 
-# Install base packages
+# Install development packages
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    build-essential \
-    git \
-    curl \
-    vim \
-    nano \
-    && rm -rf /var/lib/apt/lists/*
+  apt-get install -y --no-install-recommends \
+  build-essential \
+  ca-certificates \
+  curl \ 
+  unzip \ 
+  nano \
+  cmake \
+  git \
+  git-flow \
+  && rm -rf /var/lib/apt/lists/*
+
+# nodejs install
+RUN apt-get update && \
+  curl -fsSL https://deb.nodesource.com/setup_21.x | bash - &&\
+  apt-get install -y nodejs
+
+# Install development dependencies with npm
+RUN npm install -g vite
 
 # Copy only necessary files for development
 COPY . .
 
-# install build dependencies
+# install development dependencies
 
+# switch to application folder
+WORKDIR $PROJECT_FOLDER
+
+
+
+# Compile the application
 
 
 # Test stage
-FROM development AS test
+FROM development AS test-build
 
 # Copy only necessary files for test
 # In the previous stage, we had copied everything.
 
-# install test dependencies
+# install tests dependencies
+
+# Compile the application
+
+
+# Serve compiled application using Nginx
 
 
 
@@ -143,7 +165,15 @@ FROM development AS test
 
 
 # Production stage
-FROM test AS production
+FROM test-build AS production-build
+
+
+
+# install production dependencies
+
+
+# Serve compiled application using Nginx
+
 
 # Application run
 # It allows the application to start automatically.
