@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import Welcome from './components/Welcome.vue'
 </script>
 
@@ -6,4 +6,4 @@ import Welcome from './components/Welcome.vue'
   <Welcome msg="Life" />
 </template>
 
-<style scoped></style>
+<style scoped>
