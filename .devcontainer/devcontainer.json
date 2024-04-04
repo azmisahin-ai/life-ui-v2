@@ -10,7 +10,7 @@
  * @copyright Copyright (c) 2024
  */
 {
-  "name": "software repository template docker",
+  "name": "life_ui_v2",
   // Update the 'dockerComposeFile' list if you have more compose files or use different names.
   // The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
   "dockerComposeFile": [
@@ -32,7 +32,7 @@
         "git.authorName": "Azmi SAHIN",
         "git.authorEmail": "azmisahin@outlook.com",
         "git.defaultCloneDirectory": "${workspaceFolder}",
-        "git.autofetch": true
+        "git.autofetch": true,
       },
       "extensions": [
         "hediet.vscode-drawio",

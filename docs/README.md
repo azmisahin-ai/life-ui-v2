@@ -43,11 +43,11 @@
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/azmisahin/azmisahin-software-repository-template-docker-v2.git
+   git clone https://github.com/azmisahin-ai/life-ui-v2.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd azmisahin-software-repository-template-docker-v2
+   cd life-ui-v2
    ```
