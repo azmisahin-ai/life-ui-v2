@@ -6,4 +6,4 @@ import Welcome from './components/Welcome.vue'
   <Welcome msg="Life" />
 </template>
 
-<style scoped>
+<style scoped></style>
