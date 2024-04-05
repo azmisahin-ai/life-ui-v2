@@ -1,8 +1,9 @@
 <template>
   <div class="console-widget">
     <h4>{{ title }}</h4>
-    <div class="console-messages" ref="consoleMessages" style="height: 100px; overflow: hidden;">
-      <div v-for="(item, index) in messages" :key="index" class="console-message" :class="item.type">
+    <div class="console-messages" ref="consoleMessages" style="height: 100px; overflow-y: auto;">
+      <div v-for="(item, index) in messagesWithTimestamp" :key="index" class="console-message" :class="item.type">
+        <span class="message-timestamp">{{ item.timestamp }} - </span>
         {{ item.message }}
       </div>
     </div>
@@ -18,6 +19,13 @@ export default {
   computed: {
     messages() {
       return this.data || [];
+    },
+    messagesWithTimestamp() {
+      // Add timestamp to each message
+      return this.messages.map(item => {
+        const timestamp = this.formatTimestamp(new Date());
+        return { ...item, timestamp };
+      });
     }
   },
   watch: {
@@ -37,6 +45,13 @@ export default {
     scrollToBottom() {
       const consoleMessages = this.$refs.consoleMessages;
       consoleMessages.scrollTop = consoleMessages.scrollHeight;
+    },
+    formatTimestamp(date) {
+      // Format date to HH:mm:ss format
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const seconds = date.getSeconds().toString().padStart(2, '0');
+      return `${hours}:${minutes}:${seconds}`;
     }
   }
 };
@@ -50,16 +65,13 @@ export default {
   border-radius: 5px;
 }
 
-.console-message {
+.console-messages {
   word-wrap: break-word;
   /* Uzun kelimeleri otomatik olarak kır */
   max-width: 100%;
   /* En fazla genişlik belirle */
   overflow: hidden;
   /* Taşan içerikleri gizle */
-
-
-
 }
 
 .console-message {
@@ -67,6 +79,13 @@ export default {
   padding: 5px;
   border-radius: 3px;
   width: 100%;
+}
+
+.message-timestamp {
+  color: #ccc;
+  /* Timestamp color */
+  font-size: 0.8em;
+  /* Timestamp font size */
 }
 
 .info {

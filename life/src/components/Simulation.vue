@@ -24,8 +24,22 @@ const instanceStatus = ref({});
 
 const consoleOverlayRef = ref(null);
 
+const MAX_CONSOLE_DATA_LENGTH = 100;
+
 const addDataToConsole = (data) => {
+  // Veriyi diziye ekle
   consoleData.value.push(data);
+
+  // Dizinin uzunluğunu kontrol et
+  if (consoleData.value.length > MAX_CONSOLE_DATA_LENGTH) {
+    // Diziye eklenen ilk kaydı kaldır
+    consoleData.value.shift(); // Dizinin başından bir elemanı kaldırır
+  }
+
+  // Dizinin son halini kontrol etmek için konsola yazdırabilirsiniz
+  console.log(consoleData.value);
+
+  // Scroll işlemi
   scrollConsoleToBottom();
 };
 
