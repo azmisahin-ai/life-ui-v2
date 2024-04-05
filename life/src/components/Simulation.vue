@@ -1,10 +1,10 @@
 <template>
   <div class="simulation">
     <panel class="panel main">
-      <div class="title-overlay">
-        <Widget class="title" title="Simulation"></Widget>
-      </div>
       <div class="canvas-container">
+        <div class="title-overlay">
+          <Widget class="title" title="Simulation"></Widget>
+        </div>
         <Widget class="canvas" title=""></Widget>
       </div>
       <div class="console-overlay">
@@ -83,9 +83,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 /* Reset default margin and padding */
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -113,17 +114,23 @@ html, body {
   border: 1px solid #ddd;
   border-radius: 5px;
   margin-right: 10px;
-}
-
-.title-overlay {
-  background-color: #ccc;
-  padding: 10px;
-  text-align: center;
+  flex: 1;
+  /* Main panel takes up remaining space */
 }
 
 .canvas-container {
   flex: 1;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title-overlay {
+  background-color: #ccc;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 .canvas {
@@ -135,6 +142,10 @@ html, body {
   background-color: #333;
   color: white;
   padding: 10px;
+  flex: 0.25;
+  /* Console takes 25% of main panel height */
+  overflow-y: auto;
+  /* Enable vertical scrolling if needed */
 }
 
 .information-overlay {
@@ -149,12 +160,17 @@ html, body {
 
 /* Sidebar panel */
 .sidebar {
-  width: 25%;
+  flex: 0 0 25%;
+  /* Sidebar takes up 25% of simulation width */
+  max-width: 25%;
+  /* Max width to prevent exceeding 25% */
   background-color: #f5f5f5;
   border: 1px solid #ddd;
   border-radius: 5px;
   overflow-y: auto;
+  /* Enable vertical scrolling if needed */
 }
+
 
 .toolbar {
   padding: 10px;
@@ -191,4 +207,3 @@ html, body {
   background-color: #0056b3;
 }
 </style>
-
