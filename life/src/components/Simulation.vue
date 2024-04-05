@@ -23,7 +23,7 @@
       <toolbar class="toolbar">
         <div class="widget socket">
           <label>Program Address</label>
-          <input v-model="programAddress" name="program_address" type="url" placeholder="ws://example.com">
+          <input v-model="programAddress" name="program_address" type="url" placeholder="ws://example.com" />
           <button @click="toggleConnection" :class="{ connected: isConnected }">
             {{ isConnected ? 'Disconnect' : 'Connect' }}
           </button>
@@ -33,19 +33,19 @@
           <div class="tab core">
             <label for="number_of_instance">Number of Instances: {{ numberOfInstances }}</label>
             <input name="number_of_instance" type="range" min="1" max="100" step="1" v-model="numberOfInstances"
-              @input="updateValue($event, 'numberOfInstances')">
+              @input="updateValue($event, 'numberOfInstances')" />
             <label for="lifetime_seconds">Lifetime: {{ lifetimeSeconds }}</label>
             <input name="lifetime_seconds" type="range" min="0.1" max="60.0" step="0.1" v-model="lifetimeSeconds"
-              @input="updateValue($event, 'lifetimeSeconds')">
+              @input="updateValue($event, 'lifetimeSeconds')" />
             <label for="number_of_replicas">Number of Replicas: {{ numberOfReplicas }}</label>
             <input name="number_of_replicas" type="range" min="1" max="10" step="1" v-model="numberOfReplicas"
-              @input="updateValue($event, 'numberOfReplicas')">
+              @input="updateValue($event, 'numberOfReplicas')" />
             <label for="number_of_generation">Number of Generations: {{ numberOfGeneration }}</label>
             <input name="number_of_generation" type="range" min="1" max="10" step="1" v-model="numberOfGeneration"
-              @input="updateValue($event, 'numberOfGeneration')">
+              @input="updateValue($event, 'numberOfGeneration')" />
             <label for="max_match_limit">Maximum Match Limit: {{ maxMatchLimmit }}</label>
             <input name="max_match_limit" type="range" min="1" max="10" step="1" v-model="maxMatchLimmit"
-              @input="updateValue($event, 'maxMatchLimmit')">
+              @input="updateValue($event, 'maxMatchLimmit')" />
           </div>
           <div class="tab particles"></div>
         </div>
