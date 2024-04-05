@@ -1,81 +1,3 @@
-<template>
-  <div class="simulation">
-    <panel class="panel main">
-      <div class="canvas-container">
-        <div class="title-overlay">
-          <Widget class="title" title="Simulation"></Widget>
-        </div>
-        <Widget class="canvas" title=""></Widget>
-      </div>
-
-      <div class="console-overlay" ref="consoleOverlay" style="height: 200px; overflow-y: auto; color: white;">
-        <Widget class="console" title="Console" :data="consoleData"></Widget>
-      </div>
-
-      <div class="information-overlay">
-        <Widget class="simulation-status" title="Simulation Status" :data="simulationStatus"></Widget>
-        <Widget class="sampler-status" title="Sampler Status" :data="samplerStatus"></Widget>
-        <Widget class="instance-status" title="Instance Status" :data="instanceStatus"></Widget>
-      </div>
-    </panel>
-
-    <panel class="panel sidebar">
-      <toolbar class="toolbar">
-        <div class="widget socket">
-          <label>Program Address</label>
-          <input v-model="programAddress" name="program_address" type="url" placeholder="ws://example.com" />
-          <button @click="toggleConnection" :class="{ connected: isConnected }">
-            {{ isConnected ? 'Disconnect' : 'Connect' }}
-          </button>
-        </div>
-
-        <div class="widget simulations">
-          <div class="tab core">
-            <label for="number_of_instance">Number of Instances: {{ numberOfInstances }}</label>
-            <input name="number_of_instance" type="range" min="1" max="100" step="1" v-model="numberOfInstances"
-              @input="updateValue($event, 'numberOfInstances')" />
-            <label for="lifetime_seconds">Lifetime: {{ lifetimeSeconds }}</label>
-            <input name="lifetime_seconds" type="range" min="0.1" max="60.0" step="0.1" v-model="lifetimeSeconds"
-              @input="updateValue($event, 'lifetimeSeconds')" />
-            <label for="number_of_replicas">Number of Replicas: {{ numberOfReplicas }}</label>
-            <input name="number_of_replicas" type="range" min="1" max="10" step="1" v-model="numberOfReplicas"
-              @input="updateValue($event, 'numberOfReplicas')" />
-            <label for="number_of_generation">Number of Generations: {{ numberOfGeneration }}</label>
-            <input name="number_of_generation" type="range" min="1" max="10" step="1" v-model="numberOfGeneration"
-              @input="updateValue($event, 'numberOfGeneration')" />
-            <label for="max_match_limit">Maximum Match Limit: {{ maxMatchLimmit }}</label>
-            <input name="max_match_limit" type="range" min="1" max="10" step="1" v-model="maxMatchLimmit"
-              @input="updateValue($event, 'maxMatchLimmit')" />
-          </div>
-          <div class="tab particles"></div>
-        </div>
-
-        <div class="widget appearance">
-          <label>Appearance</label>
-          <select name="appearance">
-            <option selected>Simulation</option>
-            <option>Directory Tree</option>
-            <option>Family Tree</option>
-          </select>
-        </div>
-
-        <div class="widget action">
-          <button name="start">Start</button>
-          <button name="pause">Pause</button>
-          <button name="resume">Resume</button>
-          <button name="stop">Stop</button>
-        </div>
-
-        <div class="widget formula">
-          <label>Formula</label>
-          <textarea name="formula" placeholder="5.5 * self.generation"></textarea>
-          <button name="apply">Apply</button>
-        </div>
-      </toolbar>
-    </panel>
-  </div>
-</template>
-
 <script setup>
 import { ref, watchEffect } from 'vue';
 import io from 'socket.io-client';
@@ -175,6 +97,84 @@ const disconnectSocket = () => {
 };
 
 </script>
+
+<template>
+  <div class="simulation">
+    <panel class="panel main">
+      <div class="canvas-container">
+        <div class="title-overlay">
+          <Widget class="title" title="Simulation"></Widget>
+        </div>
+        <Widget class="canvas" title=""></Widget>
+      </div>
+
+      <div class="console-overlay" ref="consoleOverlay" style="height: 200px; overflow-y: auto; color: white;">
+        <Widget class="console" title="Console" :data="consoleData"></Widget>
+      </div>
+
+      <div class="information-overlay">
+        <Widget class="simulation-status" title="Simulation Status" :data="simulationStatus"></Widget>
+        <Widget class="sampler-status" title="Sampler Status" :data="samplerStatus"></Widget>
+        <Widget class="instance-status" title="Instance Status" :data="instanceStatus"></Widget>
+      </div>
+    </panel>
+
+    <panel class="panel sidebar">
+      <toolbar class="toolbar">
+        <div class="widget socket">
+          <label>Program Address</label>
+          <input v-model="programAddress" name="program_address" type="url" placeholder="ws://example.com" />
+          <button @click="toggleConnection" :class="{ connected: isConnected }">
+            {{ isConnected ? 'Disconnect' : 'Connect' }}
+          </button>
+        </div>
+
+        <div class="widget simulations">
+          <div class="tab core">
+            <label for="number_of_instance">Number of Instances: {{ numberOfInstances }}</label>
+            <input name="number_of_instance" type="range" min="1" max="100" step="1" v-model="numberOfInstances"
+              @input="updateValue($event, 'numberOfInstances')" />
+            <label for="lifetime_seconds">Lifetime: {{ lifetimeSeconds }}</label>
+            <input name="lifetime_seconds" type="range" min="0.1" max="60.0" step="0.1" v-model="lifetimeSeconds"
+              @input="updateValue($event, 'lifetimeSeconds')" />
+            <label for="number_of_replicas">Number of Replicas: {{ numberOfReplicas }}</label>
+            <input name="number_of_replicas" type="range" min="1" max="10" step="1" v-model="numberOfReplicas"
+              @input="updateValue($event, 'numberOfReplicas')" />
+            <label for="number_of_generation">Number of Generations: {{ numberOfGeneration }}</label>
+            <input name="number_of_generation" type="range" min="1" max="10" step="1" v-model="numberOfGeneration"
+              @input="updateValue($event, 'numberOfGeneration')" />
+            <label for="max_match_limit">Maximum Match Limit: {{ maxMatchLimmit }}</label>
+            <input name="max_match_limit" type="range" min="1" max="10" step="1" v-model="maxMatchLimmit"
+              @input="updateValue($event, 'maxMatchLimmit')" />
+          </div>
+          <div class="tab particles"></div>
+        </div>
+
+        <div class="widget appearance">
+          <label>Appearance</label>
+          <select name="appearance">
+            <option selected>Simulation</option>
+            <option>Directory Tree</option>
+            <option>Family Tree</option>
+          </select>
+        </div>
+
+        <div class="widget action">
+          <button name="start">Start</button>
+          <button name="pause">Pause</button>
+          <button name="resume">Resume</button>
+          <button name="stop">Stop</button>
+        </div>
+
+        <div class="widget formula">
+          <label>Formula</label>
+          <textarea name="formula" placeholder="5.5 * self.generation"></textarea>
+          <button name="apply">Apply</button>
+        </div>
+      </toolbar>
+    </panel>
+  </div>
+</template>
 
 <script>
 import Widget from "./Widget.vue";
