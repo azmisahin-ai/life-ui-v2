@@ -20,8 +20,16 @@ export default {
 
 <style scoped>
 .widget {
-  color: darkgrey;
-  text-align: left;
 
+  text-align: left;
+  margin: 0.1em;
+  padding: 0.1em;
+
+
+}
+
+.widget h4 {
+  margin: 0;
+  padding: 0;
 }
 </style>
