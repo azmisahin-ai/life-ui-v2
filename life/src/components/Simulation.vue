@@ -274,19 +274,50 @@ const applyFormula = async () => {
   }
 };
 
+const appearance = ref('Simulation'); // Default appearance is 'Simulation'
+const simulationData = ref([]); // Simulation canvas data
+const directoryTreeData = ref([]); // Directory tree canvas data
+const familyTreeData = ref([]); // Family tree canvas data
 
+const changeAppearance = (event) => {
+  // appearance değerini yeni görünüşe göre güncelle
+  appearance.value = event.target.value;;
+
+  console.log("appearance.value", appearance.value)
+  // appearance değerine göre içeriği güncelle
+  switch (appearance.value) {
+    case 'Simulation':
+      // loadSimulationData(); // İlgili verileri yükle
+      simulationData.value = []; // Örnek olarak içeriği temizleme
+      break;
+    case 'DirectoryTree':
+      // loadDirectoryTreeData(); // İlgili verileri yükle
+      directoryTreeData.value = []; // Örnek olarak içeriği temizleme
+      break;
+    case 'FamilyTree':
+      // loadFamilyTreeData(); // İlgili verileri yükle
+      familyTreeData.value = []; // Örnek olarak içeriği temizleme
+      break;
+    default:
+      break;
+  }
+};
 </script>
 
 <template>
   <div class="simulation">
     <!-- Main panel -->
     <panel class="panel main">
-      <!-- Canvas ve diğer bileşenler buraya gelecek -->
-      <div class="canvas-container">
-        <div class="title-overlay">
-          <Widget class="title" :title="title"></Widget>
+      <div class="appearance-container">
+        <div v-if="appearance === 'Simulation'">
+          <Widget class="canvas" title="Simulation" :data="simulationData"></Widget>
         </div>
-        <Widget class="canvas" title=""></Widget>
+        <div v-else-if="appearance === 'DirectoryTree'">
+          <Widget class="canvas" title="Directory Tree" :data="directoryTreeData"></Widget>
+        </div>
+        <div v-else-if="appearance === 'FamilyTree'">
+          <Widget class="canvas" title="Family Tree" :data="familyTreeData"></Widget>
+        </div>
       </div>
 
       <div class="console-overlay" ref="consoleOverlay" style="height: 200px; overflow-y: auto; color: white;">
@@ -347,12 +378,14 @@ const applyFormula = async () => {
 
         <div class="widget appearance">
           <label>Appearance</label>
-          <select name="appearance" title="Change your perspective on simulation.">
-            <option selected>Simulation</option>
-            <option>Directory Tree</option>
-            <option>Family Tree</option>
+          <select v-model="appearance" name="appearance" @change="changeAppearance"
+            title="Change your perspective on simulation.">
+            <option value="Simulation">Simulation</option>
+            <option value="DirectoryTree">Directory Tree</option>
+            <option value="FamilyTree">Family Tree</option>
           </select>
         </div>
+
         <div class="widget action">
           <button @click="startSimulation" :disabled="isStartDisabled"
             title="Initializes time with all initial parameters.">
@@ -447,7 +480,7 @@ body {
   /* Main panel takes up remaining space */
 }
 
-.canvas-container {
+.appearance-container {
   flex: 1;
   position: relative;
   display: flex;
@@ -456,15 +489,18 @@ body {
   align-items: center;
 }
 
+.canvas {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+}
+
 .title-overlay {
   background-color: #ccc;
   padding: 10px;
   border-radius: 5px;
-}
-
-.canvas {
-  width: 100%;
-  height: 100%;
 }
 
 .console-overlay {
