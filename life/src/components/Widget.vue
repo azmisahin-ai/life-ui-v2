@@ -1,14 +1,14 @@
 <script setup>
-defineProps({
+const { title, data } = defineProps({
   title: String,
-  data: String,
+  data: Array,
 });
 </script>
 <template>
   <div class="widget">
 
     <h4>{{ title }}</h4>
-    {{ data }}
+    <div>{{ data }}</div>
   </div>
 </template>
 
@@ -21,12 +21,9 @@ export default {
 
 <style scoped>
 .widget {
-
   text-align: left;
   margin: 0.1em;
   padding: 0.1em;
-
-
 }
 
 .widget h4 {
