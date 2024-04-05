@@ -1,9 +1,9 @@
 <script setup>
-import Welcome from './components/Welcome.vue'
+import Simulation from './components/Simulation.vue'
 </script>
 
 <template>
-  <Welcome msg="Life" />
+  <Simulation></Simulation>
 </template>
 
 <style scoped></style>
