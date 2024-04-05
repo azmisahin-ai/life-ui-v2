@@ -142,7 +142,8 @@ const startSimulation = async () => {
     });
 
     if (response.status === 200) {
-      simulationStatus.value = 'Running';
+      simulationStatus.value = response.data;
+
     } else {
       console.error('Failed to start simulation');
     }
@@ -166,7 +167,7 @@ const pauseSimulation = async () => {
     const response = await axios.get(`${programAddress.value}/socket/v1/simulation/pause`);
 
     if (response.status === 200) {
-      simulationStatus.value = 'Paused';
+      simulationStatus.value = response.data;
     }
   } catch (error) {
     console.error('Error pausing simulation:', error);
@@ -188,7 +189,7 @@ const resumeSimulation = async () => {
     const response = await axios.get(`${programAddress.value}/socket/v1/simulation/continue`);
 
     if (response.status === 200) {
-      simulationStatus.value = 'Resumed';
+      simulationStatus.value = response.data;
     }
   } catch (error) {
     console.error('Error resuming simulation:', error);
@@ -210,7 +211,7 @@ const stopSimulation = async () => {
     const response = await axios.get(`${programAddress.value}/socket/v1/simulation/stop`);
 
     if (response.status === 200) {
-      simulationStatus.value = 'Stopped';
+      simulationStatus.value = response.data;
     }
   } catch (error) {
     console.error('Error stopping simulation:', error);
