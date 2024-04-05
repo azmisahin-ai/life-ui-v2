@@ -97,21 +97,22 @@ const disconnectSocket = () => {
   }
 };
 
+const socketConnected = ref(false);
 const startSimulation = async () => {
   try {
-    // POST request to start simulation
     const response = await axios.post(`${programAddress.value}/socket/v1/simulation/start`, {
       simulation_type: 'Core',
-      simulation_status: 'Running'
+      number_of_instances: numberOfInstances.value,
+      lifetime_seconds: lifetimeSeconds.value,
+      number_of_replicas: numberOfReplicas.value,
+      number_of_generation: numberOfGeneration.value,
+      max_match_limit: maxMatchLimmit.value
     });
 
-    // Check if request was successful
     if (response.status === 200) {
-      simulationStatus.value = 'Running'; // Update simulation status
-      // Enable other buttons based on simulation status
+      simulationStatus.value = 'Running';
       enableButtons();
     } else {
-      // Handle error if request was not successful
       console.error('Failed to start simulation');
     }
   } catch (error) {
@@ -121,15 +122,8 @@ const startSimulation = async () => {
 
 const pauseSimulation = async () => {
   try {
-    // GET request to pause simulation
-    const response = await axios.get(`${programAddress.value}/socket/v1/simulation/pause`, {
-      params: {
-        simulation_type: 'Core',
-        simulation_status: 'Paused'
-      }
-    });
+    const response = await axios.get(`${programAddress.value}/socket/v1/simulation/pause`);
 
-    // Handle response and update simulation status
     if (response.status === 200) {
       simulationStatus.value = 'Paused';
     }
@@ -140,15 +134,8 @@ const pauseSimulation = async () => {
 
 const resumeSimulation = async () => {
   try {
-    // GET request to resume simulation
-    const response = await axios.get(`${programAddress.value}/socket/v1/simulation/continue`, {
-      params: {
-        simulation_type: 'Core',
-        simulation_status: 'Resumed'
-      }
-    });
+    const response = await axios.get(`${programAddress.value}/socket/v1/simulation/continue`);
 
-    // Handle response and update simulation status
     if (response.status === 200) {
       simulationStatus.value = 'Resumed';
     }
@@ -159,18 +146,10 @@ const resumeSimulation = async () => {
 
 const stopSimulation = async () => {
   try {
-    // GET request to stop simulation
-    const response = await axios.get(`${programAddress.value}/socket/v1/simulation/stop`, {
-      params: {
-        simulation_type: 'Core',
-        simulation_status: 'Stopped'
-      }
-    });
+    const response = await axios.get(`${programAddress.value}/socket/v1/simulation/stop`);
 
-    // Handle response and update simulation status
     if (response.status === 200) {
       simulationStatus.value = 'Stopped';
-      // Disable other buttons when simulation is stopped
       disableButtons();
     }
   } catch (error) {
@@ -180,7 +159,7 @@ const stopSimulation = async () => {
 
 const enableButtons = () => {
   // Enable pause, resume and stop buttons when simulation is running
-  // Assuming these buttons are defined as refs or reactive variables
+  // Assuming you have references to these buttons
   // Example: pauseButton.disabled = false;
   //          resumeButton.disabled = false;
   //          stopButton.disabled = false;
@@ -188,7 +167,7 @@ const enableButtons = () => {
 
 const disableButtons = () => {
   // Disable pause, resume and stop buttons when simulation is stopped
-  // Assuming these buttons are defined as refs or reactive variables
+  // Assuming you have references to these buttons
   // Example: pauseButton.disabled = true;
   //          resumeButton.disabled = true;
   //          stopButton.disabled = true;
@@ -258,7 +237,7 @@ const disableButtons = () => {
         </div>
 
         <div class="widget action">
-          <button @click="startSimulation" :disabled="simulationStatus === 'Running'">
+          <button @click="startSimulation" :disabled="!socketConnected || simulationStatus === 'Running'">
             Start
           </button>
           <button @click="pauseSimulation" :disabled="simulationStatus !== 'Running'">
