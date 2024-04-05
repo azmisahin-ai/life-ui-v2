@@ -1,7 +1,7 @@
 <template>
   <div class="console-widget">
     <h4>{{ title }}</h4>
-    <div class="console-messages" ref="consoleMessages" style="height: 200px; overflow-y: hidden;">
+    <div class="console-messages" ref="consoleMessages" style="height: 100px; overflow: hidden;">
       <div v-for="(item, index) in messages" :key="index" class="console-message" :class="item.type">
         {{ item.message }}
       </div>
@@ -44,7 +44,7 @@ export default {
 
 <style scoped>
 .console-widget {
-  background-color: #333;
+  background-color: #424242;
   color: white;
   padding: 10px;
   border-radius: 5px;
@@ -70,11 +70,11 @@ export default {
 }
 
 .info {
-  color: #3e88d696;
+  color: #3dd2ecc0;
 }
 
 .warning {
-  color: #e1b42e8c;
+  color: #e1b42ec8;
 }
 
 h4 {
