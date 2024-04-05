@@ -91,6 +91,9 @@ const connectSocket = () => {
 
       socket.value.on('simulation_instance_status', (data) => {
         instanceStatus.value = data;
+      });
+
+      socket.value.on('application_log', (data) => {
         addDataToConsole(data);
       });
     });
