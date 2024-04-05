@@ -1,5 +1,5 @@
 <template>
-    <div class="instance-status-widget">
+    <div class="widget-container">
         <h3>{{ name }}</h3>
         <div class="status-item">
             <p>ID: {{ id }}</p>
@@ -82,5 +82,32 @@ h3 {
 
 .status-item {
     margin-bottom: 8px;
+}
+
+/* Özel stiller burada tanımlanır */
+.widget-container {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.widget-container h3 {
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.status-item {
+    margin-bottom: 8px;
+}
+
+.status-label {
+    font-weight: bold;
+}
+
+.status-value {
+    color: #333;
 }
 </style>

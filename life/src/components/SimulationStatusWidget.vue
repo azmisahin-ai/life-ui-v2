@@ -1,11 +1,17 @@
 <template>
-    <div class="simulation-status-widget">
-        <h3>{{ simulationType }}</h3>
-        <div class="status" :class="statusClass">
-            {{ simulationStatus }}
-        </div>
+    <div class="widget-container">
+      <h3>Simulation Status</h3>
+      <div class="status-item">
+        <span class="status-label">Type:</span>
+        <span class="status-value">{{ simulationType }}</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Status:</span>
+        <span class="status-value">{{ simulationStatus }}</span>
+      </div>
     </div>
-</template>
+  </template>
+  
 
 <script>
 export default {
@@ -57,5 +63,31 @@ h3 {
 
 .status-stopped {
     color: red;
+}
+/* Özel stiller burada tanımlanır */
+.widget-container {
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.widget-container h3 {
+  margin-bottom: 10px;
+  color: #007bff;
+}
+
+.status-item {
+  margin-bottom: 8px;
+}
+
+.status-label {
+  font-weight: bold;
+}
+
+.status-value {
+  color: #333;
 }
 </style>
