@@ -230,7 +230,7 @@ const stopSimulation = async () => {
 // Define ref value for evaluated formula
 const userFormula = ref('');
 const evaluatedFormula = ref('');
-const formulaError = ref(null); 
+const formulaError = ref(null);
 const evaluateFormula = (formula) => {
   try {
     const evaluated = vm.run(`return ${formula}`);
@@ -322,7 +322,7 @@ const changeAppearance = (event) => {
       </div>
 
       <div class="console-overlay" ref="consoleOverlay" style="height: 200px; overflow-y: auto; color: white;">
-        <Widget class="console" title="Console" :data="consoleData"></Widget>
+        <ConsoleWidget class="console" :title="'Console'" :data="consoleData" />
       </div>
 
       <div class="information-overlay">
@@ -438,14 +438,19 @@ const changeAppearance = (event) => {
 
 <script>
 import Widget from "./Widget.vue";
-
+import ConsoleWidget from './ConsoleWidget.vue';
 export default {
   components: {
     Widget,
+    ConsoleWidget
   },
   setup() {
     return {
-      consoleData,
+      consoleData: [
+        { type: 'info', message: 'This is an information message' },
+        { type: 'warning', message: 'This is a warning message' }
+        // Add more messages as needed
+      ],
       consoleOverlayRef,
       isStartDisabled,
       isStopDisabled,
