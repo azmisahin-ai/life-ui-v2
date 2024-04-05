@@ -283,7 +283,6 @@ const changeAppearance = (event) => {
   // appearance değerini yeni görünüşe göre güncelle
   appearance.value = event.target.value;;
 
-  console.log("appearance.value", appearance.value)
   // appearance değerine göre içeriği güncelle
   switch (appearance.value) {
     case 'Simulation':
@@ -308,6 +307,7 @@ const changeAppearance = (event) => {
   <div class="simulation">
     <!-- Main panel -->
     <div class="panel main">
+      
       <div class="appearance-container">
         <div v-if="appearance === 'Simulation'">
           <Widget class="canvas" title="Simulation" :data="simulationData"></Widget>
