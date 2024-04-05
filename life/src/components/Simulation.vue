@@ -248,8 +248,8 @@ const stopSimulation = async () => {
         <!-- Socket bağlantısı -->
         <div class="widget socket">
           <label>Program Address</label>
-          <input v-model="programAddress" name="program_address" type="url" placeholder="ws://example.com" />
-          <button @click="toggleConnection" :class="{ connected: isConnected }">
+          <input v-model="programAddress" name="program_address" type="url" placeholder="ws://example.com" title="The main server where the cores are simulated." />
+          <button @click="toggleConnection" :class="{ connected: isConnected }" title="The main server connection where the cores are simulated.">
             {{ isConnected ? 'Disconnect' : 'Connect' }}
           </button>
         </div>
@@ -259,52 +259,52 @@ const stopSimulation = async () => {
           <div class="tab core">
             <label for="number_of_instances">Number of Instances: {{ numberOfInstances }}</label>
             <input name="number_of_instances" type="range" min="1" max="100" step="1" v-model="numberOfInstances"
-              @input="updateValue($event, 'numberOfInstances')" />
+              @input="updateValue($event, 'numberOfInstances')" title="Number of samples to be created. The first community created from nothing." />
             <label for="lifetime_seconds">Lifetime: {{ lifetimeSeconds }}</label>
             <input name="lifetime_seconds" type="range" min="0.1" max="60.0" step="0.1" v-model="lifetimeSeconds"
-              @input="updateValue($event, 'lifetimeSeconds')" />
+              @input="updateValue($event, 'lifetimeSeconds')" title="The particle's lifetime is in seconds. The assumed lifetime or energy of the particle." />
             <label for="lifecycle">Lifecycle: {{ lifecycle }}</label>
             <input name="lifecycle" type="range" min="0.1" max="60.0" step="0.1" v-model="lifecycle"
-              @input="updateValue($event, 'lifecycle')" />
+              @input="updateValue($event, 'lifecycle')" title="Minute life cycle of the particle. Time management. Examples of time travel of nuclei."/>
             <label for="number_of_replicas">Number of Replicas: {{ numberOfReplicas }}</label>
             <input name="number_of_replicas" type="range" min="1" max="10" step="1" v-model="numberOfReplicas"
-              @input="updateValue($event, 'numberOfReplicas')" />
+              @input="updateValue($event, 'numberOfReplicas')" title="Number of copies to be created. When pairing occurs and the limit of new copies to be created."/>
             <label for="number_of_generation">Number of Generations: {{ numberOfGeneration }}</label>
             <input name="number_of_generation" type="range" min="1" max="10" step="1" v-model="numberOfGeneration"
-              @input="updateValue($event, 'numberOfGeneration')" />
+              @input="updateValue($event, 'numberOfGeneration')" title="Generation depth. If the maximum throughput is reached or the maximum copy value is 0, it stops replicating." />
             <label for="max_match_limit">Maximum Match Limit: {{ maxMatchLimit }}</label>
             <input name="max_match_limit" type="range" min="1" max="10" step="1" v-model="maxMatchLimit"
-              @input="updateValue($event, 'maxMatchLimit')" />
+              @input="updateValue($event, 'maxMatchLimit')" title="Maximum pairing limit. If any of the cores have been paired before or the maximum limit has been reached, it will skip pairing." />
           </div>
           <div class="tab particles"></div>
         </div>
 
         <div class="widget appearance">
           <label>Appearance</label>
-          <select name="appearance">
+          <select name="appearance" title="Change your perspective on simulation.">
             <option selected>Simulation</option>
             <option>Directory Tree</option>
             <option>Family Tree</option>
           </select>
         </div>
         <div class="widget action">
-          <button @click="startSimulation" :disabled="isStartDisabled">
+          <button @click="startSimulation" :disabled="isStartDisabled" title="Initializes time with all initial parameters.">
             Start
           </button>
-          <button @click="pauseSimulation" :disabled="isPauseDisabled">
+          <button @click="pauseSimulation" :disabled="isPauseDisabled" title="Pauses time with all initial parameters.">
             Pause
           </button>
-          <button @click="resumeSimulation" :disabled="isResumeDisabled">
+          <button @click="resumeSimulation" :disabled="isResumeDisabled" title="Resumes time with all initial parameters.">
             Resume
           </button>
-          <button @click="stopSimulation" :disabled="isStopDisabled">
+          <button @click="stopSimulation" :disabled="isStopDisabled" title="Stop time with all starting parameters.">
             Stop
           </button>
         </div>
         <div class="widget formula">
           <label>Formula</label>
-          <textarea name="formula" placeholder="5.5 * self.generation"></textarea>
-          <button name="apply">Apply</button>
+          <textarea name="formula" placeholder="5.5 * self.generation" title="It safely evaluates the formula entered by the user and updates its life time."></textarea>
+          <button name="apply" title="Transfers the process of applying the formula to all copies to the queue. Updates are made to each core that gives a signal in the time stream.">Apply</button>
         </div>
       </toolbar>
     </panel>
