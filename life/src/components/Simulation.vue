@@ -276,7 +276,7 @@ const applyFormula = async () => {
 };
 
 const appearance = ref('Simulation'); // Default appearance is 'Simulation'
-const simulationData = ref([]); // Simulation canvas data
+const simulationData = ref({}); // Simulation canvas data
 const directoryTreeData = ref([]); // Directory tree canvas data
 const familyTreeData = ref([]); // Family tree canvas data
 
@@ -288,7 +288,7 @@ const changeAppearance = (event) => {
   switch (appearance.value) {
     case 'Simulation':
       // loadSimulationData(); // İlgili verileri yükle
-      simulationData.value = []; // Örnek olarak içeriği temizleme
+      simulationData.value = {}; // Örnek olarak içeriği temizleme
       break;
     case 'DirectoryTree':
       // loadDirectoryTreeData(); // İlgili verileri yükle
@@ -326,7 +326,9 @@ const changeAppearance = (event) => {
       </div>
 
       <div class="information-overlay">
-        <Widget class="simulation-status" title="Simulation Status" :data="simulationStatus"></Widget>
+
+        <SimulationStatusWidget class="simulation-status" :simulationType="simulationStatus.simulation_type"
+          :simulationStatus="simulationStatus.simulation_status" />
         <Widget class="sampler-status" title="Sampler Status" :data="samplerStatus"></Widget>
         <Widget class="instance-status" title="Instance Status" :data="instanceStatus"></Widget>
       </div>
@@ -439,10 +441,12 @@ const changeAppearance = (event) => {
 <script>
 import Widget from "./Widget.vue";
 import ConsoleWidget from './ConsoleWidget.vue';
+import SimulationStatusWidget from './SimulationStatusWidget.vue';
 export default {
   components: {
     Widget,
-    ConsoleWidget
+    ConsoleWidget,
+    SimulationStatusWidget
   },
   setup() {
     return {
