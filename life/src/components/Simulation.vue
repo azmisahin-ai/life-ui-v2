@@ -267,7 +267,7 @@ const stopSimulation = async () => {
             <input name="lifecycle" type="range" min="0.1" max="60.0" step="0.1" v-model="lifecycle"
               @input="updateValue($event, 'lifecycle')" title="Minute life cycle of the particle. Time management. Examples of time travel of nuclei."/>
             <label for="number_of_replicas">Number of Replicas: {{ numberOfReplicas }}</label>
-            <input name="number_of_replicas" type="range" min="1" max="10" step="1" v-model="numberOfReplicas"
+            <input name="number_of_replicas" type="range" min="1" max="20" step="1" v-model="numberOfReplicas"
               @input="updateValue($event, 'numberOfReplicas')" title="Number of copies to be created. When pairing occurs and the limit of new copies to be created."/>
             <label for="number_of_generation">Number of Generations: {{ numberOfGeneration }}</label>
             <input name="number_of_generation" type="range" min="1" max="10" step="1" v-model="numberOfGeneration"
