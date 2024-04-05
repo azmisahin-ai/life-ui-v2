@@ -33,7 +33,7 @@ const scrollConsoleToBottom = () => {
     consoleOverlayRef.value.scrollTop = consoleOverlayRef.value.scrollHeight;
   }
 };
-// Değişen değerler için izleyici ekleyelim
+
 watchEffect(() => {
   scrollConsoleToBottom();
 });
@@ -60,8 +60,6 @@ const updateValue = (event, variableName) => {
   }
 };
 
-
-
 const toggleConnection = () => {
   if (isConnected.value) {
     disconnectSocket();
@@ -77,6 +75,7 @@ const connectSocket = () => {
     socket.value.on('connect', () => {
       console.log('Connected to socket server:', programAddress.value);
       isConnected.value = true;
+      isStartDisabled.value = false;
 
       socket.value.on('simulation_status', (data) => {
         simulationStatus.value = data;
@@ -95,6 +94,7 @@ const connectSocket = () => {
     socket.value.on('connect_error', (error) => {
       console.error('Socket connection error:', error);
       disconnectSocket();
+
     });
   }
 };
@@ -104,14 +104,16 @@ const disconnectSocket = () => {
     socket.value.disconnect();
     socket.value = null;
     isConnected.value = false;
+    isStartDisabled.value = true;
     console.log('Disconnected from socket server');
   }
 };
 
-const startDisabled = ref(false);
-const pauseDisabled = ref(true);
-const resumeDisabled = ref(true);
-const stopDisabled = ref(true);
+// Buton etkinlik durumları için ref değerleri
+const isStartDisabled = ref(true);
+const isPauseDisabled = ref(true);
+const isResumeDisabled = ref(true);
+const isStopDisabled = ref(true);
 
 const startSimulation = async () => {
   if (!isConnected.value) {
@@ -119,11 +121,10 @@ const startSimulation = async () => {
     return;
   }
 
-  // Başlama işlemi burada gerçekleştirilir
-  startDisabled.value = true;
-  pauseDisabled.value = false;
-  resumeDisabled.value = true;
-  stopDisabled.value = false;
+  isStartDisabled.value = true;
+  isPauseDisabled.value = false;
+  isResumeDisabled.value = true;
+  isStopDisabled.value = false;
 
   try {
     const response = await axios.post(`${programAddress.value}/socket/v1/simulation/start`, {
@@ -132,12 +133,11 @@ const startSimulation = async () => {
       lifetime_seconds: lifetimeSeconds.value,
       number_of_replicas: numberOfReplicas.value,
       number_of_generation: numberOfGeneration.value,
-      max_match_limit: maxMatchLimit.value // Değişken adını düzelttim
+      max_match_limit: maxMatchLimit.value
     });
 
     if (response.status === 200) {
       simulationStatus.value = 'Running';
-      enableButtons();
     } else {
       console.error('Failed to start simulation');
     }
@@ -152,11 +152,10 @@ const pauseSimulation = async () => {
     return;
   }
 
-  // Duraklatma işlemi burada gerçekleştirilir
-  startDisabled.value = true;
-  pauseDisabled.value = true;
-  resumeDisabled.value = false;
-  stopDisabled.value = false;
+  isStartDisabled.value = true;
+  isPauseDisabled.value = true;
+  isResumeDisabled.value = false;
+  isStopDisabled.value = false;
 
   try {
     const response = await axios.get(`${programAddress.value}/socket/v1/simulation/pause`);
@@ -175,11 +174,10 @@ const resumeSimulation = async () => {
     return;
   }
 
-  // Devam ettirme işlemi burada gerçekleştirilir
-  startDisabled.value = true;
-  pauseDisabled.value = false;
-  resumeDisabled.value = true;
-  stopDisabled.value = false;
+  isStartDisabled.value = true;
+  isPauseDisabled.value = false;
+  isResumeDisabled.value = true;
+  isStopDisabled.value = false;
 
   try {
     const response = await axios.get(`${programAddress.value}/socket/v1/simulation/continue`);
@@ -198,44 +196,28 @@ const stopSimulation = async () => {
     return;
   }
 
-  // Durdurma işlemi burada gerçekleştirilir
-  startDisabled.value = false;
-  pauseDisabled.value = true;
-  resumeDisabled.value = true;
-  stopDisabled.value = true;
+  isStartDisabled.value = false;
+  isPauseDisabled.value = true;
+  isResumeDisabled.value = true;
+  isStopDisabled.value = true;
 
   try {
     const response = await axios.get(`${programAddress.value}/socket/v1/simulation/stop`);
 
     if (response.status === 200) {
       simulationStatus.value = 'Stopped';
-      disableButtons();
     }
   } catch (error) {
     console.error('Error stopping simulation:', error);
   }
 };
-
-const enableButtons = () => {
-  pauseButton.disabled = false;
-  resumeButton.disabled = false;
-  stopButton.disabled = false;
-};
-
-const disableButtons = () => {
-  pauseButton.disabled = true;
-  resumeButton.disabled = true;
-  stopButton.disabled = true;
-};
-
-
-
 </script>
 
 <template>
   <div class="simulation">
     <!-- Main panel -->
     <panel class="panel main">
+      <!-- Canvas ve diğer bileşenler buraya gelecek -->
       <div class="canvas-container">
         <div class="title-overlay">
           <Widget class="title" :title="title"></Widget>
@@ -297,16 +279,16 @@ const disableButtons = () => {
           </select>
         </div>
         <div class="widget action">
-          <button @click="startSimulation" :disabled="startDisabled">
+          <button @click="startSimulation" :disabled="isStartDisabled">
             Start
           </button>
-          <button @click="pauseSimulation" :disabled="pauseDisabled">
+          <button @click="pauseSimulation" :disabled="isPauseDisabled">
             Pause
           </button>
-          <button @click="resumeSimulation" :disabled="resumeDisabled">
+          <button @click="resumeSimulation" :disabled="isResumeDisabled">
             Resume
           </button>
-          <button @click="stopSimulation" :disabled="stopDisabled">
+          <button @click="stopSimulation" :disabled="isStopDisabled">
             Stop
           </button>
         </div>
