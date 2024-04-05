@@ -108,11 +108,22 @@ const disconnectSocket = () => {
   }
 };
 
+const startDisabled = ref(false);
+const pauseDisabled = ref(true);
+const resumeDisabled = ref(true);
+const stopDisabled = ref(true);
+
 const startSimulation = async () => {
   if (!isConnected.value) {
     console.error('Socket is not connected');
     return;
   }
+
+  // Başlama işlemi burada gerçekleştirilir
+  startDisabled.value = true;
+  pauseDisabled.value = false;
+  resumeDisabled.value = true;
+  stopDisabled.value = false;
 
   try {
     const response = await axios.post(`${programAddress.value}/socket/v1/simulation/start`, {
@@ -141,6 +152,12 @@ const pauseSimulation = async () => {
     return;
   }
 
+  // Duraklatma işlemi burada gerçekleştirilir
+  startDisabled.value = true;
+  pauseDisabled.value = true;
+  resumeDisabled.value = false;
+  stopDisabled.value = false;
+
   try {
     const response = await axios.get(`${programAddress.value}/socket/v1/simulation/pause`);
 
@@ -158,6 +175,12 @@ const resumeSimulation = async () => {
     return;
   }
 
+  // Devam ettirme işlemi burada gerçekleştirilir
+  startDisabled.value = true;
+  pauseDisabled.value = false;
+  resumeDisabled.value = true;
+  stopDisabled.value = false;
+
   try {
     const response = await axios.get(`${programAddress.value}/socket/v1/simulation/continue`);
 
@@ -174,6 +197,12 @@ const stopSimulation = async () => {
     console.error('Socket is not connected');
     return;
   }
+
+  // Durdurma işlemi burada gerçekleştirilir
+  startDisabled.value = false;
+  pauseDisabled.value = true;
+  resumeDisabled.value = true;
+  stopDisabled.value = true;
 
   try {
     const response = await axios.get(`${programAddress.value}/socket/v1/simulation/stop`);
@@ -198,6 +227,8 @@ const disableButtons = () => {
   resumeButton.disabled = true;
   stopButton.disabled = true;
 };
+
+
 
 </script>
 
@@ -266,16 +297,16 @@ const disableButtons = () => {
           </select>
         </div>
         <div class="widget action">
-          <button @click="startSimulation" :disabled="!isConnected || simulationStatus === 'Running'">
+          <button @click="startSimulation" :disabled="startDisabled">
             Start
           </button>
-          <button @click="pauseSimulation" :disabled="simulationStatus !== 'Running'">
+          <button @click="pauseSimulation" :disabled="pauseDisabled">
             Pause
           </button>
-          <button @click="resumeSimulation" :disabled="simulationStatus !== 'Paused'">
+          <button @click="resumeSimulation" :disabled="resumeDisabled">
             Resume
           </button>
-          <button @click="stopSimulation" :disabled="simulationStatus !== 'Running' && simulationStatus !== 'Paused'">
+          <button @click="stopSimulation" :disabled="stopDisabled">
             Stop
           </button>
         </div>
