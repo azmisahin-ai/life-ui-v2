@@ -18,9 +18,9 @@ const programAddress = ref('');
 const socket = ref(null);
 const isConnected = ref(false);
 const consoleData = ref([]);
-const simulationStatus = ref([]);
-const samplerStatus = ref([]);
-const instanceStatus = ref([]);
+const simulationStatus = ref({});
+const samplerStatus = ref({});
+const instanceStatus = ref({});
 
 const consoleOverlayRef = ref(null);
 
@@ -329,7 +329,13 @@ const changeAppearance = (event) => {
 
         <SimulationStatusWidget class="simulation-status" :simulationType="simulationStatus.simulation_type"
           :simulationStatus="simulationStatus.simulation_status" />
-        <Widget class="sampler-status" title="Sampler Status" :data="samplerStatus"></Widget>
+
+        <SamplerStatusWidget class="sampler-status" :name="samplerStatus.name"
+          :numberOfInstances="samplerStatus.number_of_instance" :lifetimeSeconds="samplerStatus.lifetime_seconds"
+          :lifecycle="samplerStatus.lifecycle" :numberOfInstancesCreated="samplerStatus.number_of_instance_created"
+          :numberOfInstancesMatched="samplerStatus.number_of_instance_matched"
+          :numberOfInstancesReplicated="samplerStatus.number_of_instance_replicated" />
+
         <Widget class="instance-status" title="Instance Status" :data="instanceStatus"></Widget>
       </div>
     </div>
@@ -442,11 +448,13 @@ const changeAppearance = (event) => {
 import Widget from "./Widget.vue";
 import ConsoleWidget from './ConsoleWidget.vue';
 import SimulationStatusWidget from './SimulationStatusWidget.vue';
+import SamplerStatusWidget from './SamplerStatusWidget.vue';
 export default {
   components: {
     Widget,
     ConsoleWidget,
-    SimulationStatusWidget
+    SimulationStatusWidget,
+    SamplerStatusWidget
   },
   setup() {
     return {
