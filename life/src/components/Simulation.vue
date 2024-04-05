@@ -23,10 +23,13 @@
 
     <panel class="panel sidebar">
       <toolbar class="toolbar">
+
         <div class="widget socket">
           <label>Program Address</label>
-          <input name="program_address" type="url" placeholder="http://">
-          <button name="connect">Connect</button>
+          <input v-model="programAddress" name="program_address" type="url" placeholder="http://127.0.0.1:8080">
+          <button @click="toggleConnection" :class="{ connected: isConnected }">
+            {{ isConnected ? 'Disconnect' : 'Connect' }}
+          </button>
         </div>
 
         <div class="widget simulations">
@@ -90,14 +93,6 @@ defineProps({
   title: String,
 });
 
-const simulationData = ref({
-  simulationStatus: '',
-  samplerStatus: '',
-  instanceStatus: '',
-});
-
-const consoleData = ref([]);
-
 // Vue 3 ref ile yeni değişkenler oluşturuyoruz
 const numberOfInstances = ref(1);
 const lifetimeSeconds = ref(0.1);
@@ -115,6 +110,45 @@ const values = {
 
 const updateValue = (event, variableName) => {
   values[variableName].value = event.target.value;
+};
+
+const simulationData = ref({
+  simulationStatus: '',
+  samplerStatus: '',
+  instanceStatus: '',
+});
+
+const consoleData = ref([]);
+
+const programAddress = ref('');
+const isConnected = ref(false);
+
+const toggleConnection = () => {
+  if (isConnected.value) {
+    // Disconnect
+    disconnectSocket();
+  } else {
+    // Connect
+    connectSocket();
+  }
+};
+
+const connectSocket = () => {
+  // Simulate connection (for demonstration purposes)
+  console.log('Connecting to', programAddress.value);
+  // Perform actual connection logic here
+
+  // Update connection status
+  isConnected.value = true;
+};
+
+const disconnectSocket = () => {
+  // Simulate disconnection (for demonstration purposes)
+  console.log('Disconnecting from', programAddress.value);
+  // Perform actual disconnection logic here
+
+  // Update connection status
+  isConnected.value = false;
 };
 
 </script>
@@ -258,5 +292,23 @@ body {
 
 .widget button:hover {
   background-color: #0056b3;
+}
+
+.widget.socket {
+  margin-bottom: 20px;
+}
+
+.widget.socket button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.widget.socket button.connected {
+  background-color: #dc3545;
+  /* Red color when connected */
 }
 </style>
