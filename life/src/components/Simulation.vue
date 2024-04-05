@@ -307,7 +307,7 @@ const changeAppearance = (event) => {
 <template>
   <div class="simulation">
     <!-- Main panel -->
-    <panel class="panel main">
+    <div class="panel main">
       <div class="appearance-container">
         <div v-if="appearance === 'Simulation'">
           <Widget class="canvas" title="Simulation" :data="simulationData"></Widget>
@@ -329,11 +329,13 @@ const changeAppearance = (event) => {
         <Widget class="sampler-status" title="Sampler Status" :data="samplerStatus"></Widget>
         <Widget class="instance-status" title="Instance Status" :data="instanceStatus"></Widget>
       </div>
-    </panel>
+    </div>
 
     <!-- Sidebar panel -->
-    <panel class="panel sidebar">
-      <toolbar class="toolbar">
+    <div class="panel sidebar">
+
+      <div class="toolbar">
+
         <!-- Socket bağlantısı -->
         <div class="widget socket">
           <label>Program Address</label>
@@ -402,6 +404,7 @@ const changeAppearance = (event) => {
             Stop
           </button>
         </div>
+
         <div class="widget formula">
 
           <label>Formula</label>
@@ -422,8 +425,11 @@ const changeAppearance = (event) => {
           <button @click="applyFormula" :disabled="!isStartDisabled || isStopDisabled"
             title="Apply the formula to all copies.">Apply</button>
         </div>
-      </toolbar>
-    </panel>
+
+      </div>
+
+    </div>
+
   </div>
 </template>
 
