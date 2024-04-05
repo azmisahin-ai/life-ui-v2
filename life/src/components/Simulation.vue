@@ -12,18 +12,15 @@
         <Widget class="console" title="Console" :data="consoleData"></Widget>
       </div>
 
-
       <div class="information-overlay">
         <Widget class="simulation-status" title="Simulation Status" :data="simulationStatus"></Widget>
         <Widget class="sampler-status" title="Sampler Status" :data="samplerStatus"></Widget>
         <Widget class="instance-status" title="Instance Status" :data="instanceStatus"></Widget>
       </div>
-
     </panel>
 
     <panel class="panel sidebar">
       <toolbar class="toolbar">
-
         <div class="widget socket">
           <label>Program Address</label>
           <input v-model="programAddress" name="program_address" type="url" placeholder="ws://example.com">
@@ -34,27 +31,21 @@
 
         <div class="widget simulations">
           <div class="tab core">
-
             <label for="number_of_instance">Number of Instances: {{ numberOfInstances }}</label>
             <input name="number_of_instance" type="range" min="1" max="100" step="1" v-model="numberOfInstances"
               @input="updateValue($event, 'numberOfInstances')">
-
             <label for="lifetime_seconds">Lifetime: {{ lifetimeSeconds }}</label>
             <input name="lifetime_seconds" type="range" min="0.1" max="60.0" step="0.1" v-model="lifetimeSeconds"
               @input="updateValue($event, 'lifetimeSeconds')">
-
             <label for="number_of_replicas">Number of Replicas: {{ numberOfReplicas }}</label>
             <input name="number_of_replicas" type="range" min="1" max="10" step="1" v-model="numberOfReplicas"
               @input="updateValue($event, 'numberOfReplicas')">
-
             <label for="number_of_generation">Number of Generations: {{ numberOfGeneration }}</label>
             <input name="number_of_generation" type="range" min="1" max="10" step="1" v-model="numberOfGeneration"
               @input="updateValue($event, 'numberOfGeneration')">
-
             <label for="max_match_limit">Maximum Match Limit: {{ maxMatchLimmit }}</label>
             <input name="max_match_limit" type="range" min="1" max="10" step="1" v-model="maxMatchLimmit"
               @input="updateValue($event, 'maxMatchLimmit')">
-
           </div>
           <div class="tab particles"></div>
         </div>
@@ -85,7 +76,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref } from 'vue';
 import io from 'socket.io-client';
@@ -94,7 +84,6 @@ defineProps({
   title: String,
 });
 
-// Vue 3 ref ile yeni değişkenler oluşturuyoruz
 const numberOfInstances = ref(1);
 const lifetimeSeconds = ref(0.1);
 const numberOfReplicas = ref(1);
@@ -102,17 +91,16 @@ const numberOfGeneration = ref(1);
 const maxMatchLimmit = ref(1);
 
 const values = {
-  numberOfInstances: numberOfInstances,
-  lifetimeSeconds: lifetimeSeconds,
-  numberOfReplicas: numberOfReplicas,
-  numberOfGeneration: numberOfGeneration,
-  maxMatchLimmit: maxMatchLimmit,
+  numberOfInstances,
+  lifetimeSeconds,
+  numberOfReplicas,
+  numberOfGeneration,
+  maxMatchLimmit,
 };
 
 const updateValue = (event, variableName) => {
   values[variableName].value = event.target.value;
 };
-
 
 const programAddress = ref('');
 const socket = ref(null);
@@ -131,16 +119,13 @@ const toggleConnection = () => {
 };
 
 const connectSocket = () => {
-  // Bağlantıyı kur
   if (programAddress.value) {
     socket.value = io(programAddress.value);
 
-    // Bağlantı başarılı
     socket.value.on('connect', () => {
       console.log('Connected to socket server:', programAddress.value);
       isConnected.value = true;
 
-      // Kanalları dinle
       socket.value.on('simulation_status', (data) => {
         simulationStatus.value = data;
       });
@@ -151,10 +136,10 @@ const connectSocket = () => {
 
       socket.value.on('simulation_instance_status', (data) => {
         instanceStatus.value = data;
+        consoleData.value.push(data);
       });
     });
 
-    // Bağlantı hatası
     socket.value.on('connect_error', (error) => {
       console.error('Socket connection error:', error);
       disconnectSocket();
@@ -163,7 +148,6 @@ const connectSocket = () => {
 };
 
 const disconnectSocket = () => {
-  // Bağlantıyı kapat
   if (socket.value) {
     socket.value.disconnect();
     socket.value = null;
@@ -175,14 +159,13 @@ const disconnectSocket = () => {
 </script>
 
 <script>
-
 import Widget from "./Widget.vue";
+
 export default {
   components: {
     Widget,
   },
   setup() {
-    // Veriler değiştiğinde Widget bileşenleri güncellenecek
     return {
       consoleData,
     };
