@@ -108,7 +108,12 @@ const disconnectSocket = () => {
     socket.value.disconnect();
     socket.value = null;
     isConnected.value = false;
+    // Disable buttons when disconnected
     isStartDisabled.value = true;
+    isPauseDisabled.value = true;
+    isResumeDisabled.value = true;
+    isStopDisabled.value = true;
+
     console.log('Disconnected from socket server');
   }
 };
@@ -217,6 +222,33 @@ const stopSimulation = async () => {
     console.error('Error stopping simulation:', error);
   }
 };
+
+// Define ref value for evaluated formula
+const userFormula = ref('');
+const evaluatedFormula = ref('');
+const applyFormula = async () => {
+  if (!isConnected.value) {
+    console.error('Socket is not connected');
+    return;
+  }
+
+  try {
+    const response = await axios.post(`${programAddress.value}/socket/v1/simulation/update/all`, {
+      formula: userFormula.value,
+    });
+
+    if (response.status === 200) {
+      const result = response.data;
+      evaluatedFormula.value = result;
+      console.log('Formula applied successfully:', result);
+      // Display result to user or update UI as needed
+    }
+  } catch (error) {
+    console.error('Error applying formula:', error);
+  }
+};
+
+
 </script>
 
 <template>
@@ -248,8 +280,10 @@ const stopSimulation = async () => {
         <!-- Socket bağlantısı -->
         <div class="widget socket">
           <label>Program Address</label>
-          <input v-model="programAddress" name="program_address" type="url" placeholder="ws://example.com" title="The main server where the cores are simulated." />
-          <button @click="toggleConnection" :class="{ connected: isConnected }" title="The main server connection where the cores are simulated.">
+          <input v-model="programAddress" name="program_address" type="url" placeholder="ws://example.com"
+            title="The main server where the cores are simulated." />
+          <button @click="toggleConnection" :class="{ connected: isConnected }"
+            title="The main server connection where the cores are simulated.">
             {{ isConnected ? 'Disconnect' : 'Connect' }}
           </button>
         </div>
@@ -259,22 +293,28 @@ const stopSimulation = async () => {
           <div class="tab core">
             <label for="number_of_instances">Number of Instances: {{ numberOfInstances }}</label>
             <input name="number_of_instances" type="range" min="1" max="100" step="1" v-model="numberOfInstances"
-              @input="updateValue($event, 'numberOfInstances')" title="Number of samples to be created. The first community created from nothing." />
+              @input="updateValue($event, 'numberOfInstances')"
+              title="Number of samples to be created. The first community created from nothing." />
             <label for="lifetime_seconds">Lifetime: {{ lifetimeSeconds }}</label>
             <input name="lifetime_seconds" type="range" min="0.1" max="60.0" step="0.1" v-model="lifetimeSeconds"
-              @input="updateValue($event, 'lifetimeSeconds')" title="The particle's lifetime is in seconds. The assumed lifetime or energy of the particle." />
+              @input="updateValue($event, 'lifetimeSeconds')"
+              title="The particle's lifetime is in seconds. The assumed lifetime or energy of the particle." />
             <label for="lifecycle">Lifecycle: {{ lifecycle }}</label>
             <input name="lifecycle" type="range" min="0.1" max="60.0" step="0.1" v-model="lifecycle"
-              @input="updateValue($event, 'lifecycle')" title="Minute life cycle of the particle. Time management. Examples of time travel of nuclei."/>
+              @input="updateValue($event, 'lifecycle')"
+              title="Minute life cycle of the particle. Time management. Examples of time travel of nuclei." />
             <label for="number_of_replicas">Number of Replicas: {{ numberOfReplicas }}</label>
             <input name="number_of_replicas" type="range" min="1" max="20" step="1" v-model="numberOfReplicas"
-              @input="updateValue($event, 'numberOfReplicas')" title="Number of copies to be created. When pairing occurs and the limit of new copies to be created."/>
+              @input="updateValue($event, 'numberOfReplicas')"
+              title="Number of copies to be created. When pairing occurs and the limit of new copies to be created." />
             <label for="number_of_generation">Number of Generations: {{ numberOfGeneration }}</label>
             <input name="number_of_generation" type="range" min="1" max="10" step="1" v-model="numberOfGeneration"
-              @input="updateValue($event, 'numberOfGeneration')" title="Generation depth. If the maximum throughput is reached or the maximum copy value is 0, it stops replicating." />
+              @input="updateValue($event, 'numberOfGeneration')"
+              title="Generation depth. If the maximum throughput is reached or the maximum copy value is 0, it stops replicating." />
             <label for="max_match_limit">Maximum Match Limit: {{ maxMatchLimit }}</label>
             <input name="max_match_limit" type="range" min="1" max="10" step="1" v-model="maxMatchLimit"
-              @input="updateValue($event, 'maxMatchLimit')" title="Maximum pairing limit. If any of the cores have been paired before or the maximum limit has been reached, it will skip pairing." />
+              @input="updateValue($event, 'maxMatchLimit')"
+              title="Maximum pairing limit. If any of the cores have been paired before or the maximum limit has been reached, it will skip pairing." />
           </div>
           <div class="tab particles"></div>
         </div>
@@ -288,13 +328,15 @@ const stopSimulation = async () => {
           </select>
         </div>
         <div class="widget action">
-          <button @click="startSimulation" :disabled="isStartDisabled" title="Initializes time with all initial parameters.">
+          <button @click="startSimulation" :disabled="isStartDisabled"
+            title="Initializes time with all initial parameters.">
             Start
           </button>
           <button @click="pauseSimulation" :disabled="isPauseDisabled" title="Pauses time with all initial parameters.">
             Pause
           </button>
-          <button @click="resumeSimulation" :disabled="isResumeDisabled" title="Resumes time with all initial parameters.">
+          <button @click="resumeSimulation" :disabled="isResumeDisabled"
+            title="Resumes time with all initial parameters.">
             Resume
           </button>
           <button @click="stopSimulation" :disabled="isStopDisabled" title="Stop time with all starting parameters.">
@@ -302,9 +344,11 @@ const stopSimulation = async () => {
           </button>
         </div>
         <div class="widget formula">
-          <label>Formula</label>
-          <textarea name="formula" placeholder="5.5 * self.generation" title="It safely evaluates the formula entered by the user and updates its life time."></textarea>
-          <button name="apply" title="Transfers the process of applying the formula to all copies to the queue. Updates are made to each core that gives a signal in the time stream.">Apply</button>
+          <label>Formula {{ evaluatedFormula }}</label>
+          <textarea v-model="userFormula" name="formula" placeholder="5.5 * self.generation"
+            title="It safely evaluates the formula entered by the user and updates its life time."></textarea>
+          <button @click="applyFormula" :disabled="!isStartDisabled || isStopDisabled"
+            title="Transfers the process of applying the formula to all copies to the queue. Updates are made to each core that gives a signal in the time stream.">Apply</button>
         </div>
       </toolbar>
     </panel>
@@ -321,7 +365,9 @@ export default {
   setup() {
     return {
       consoleData,
-      consoleOverlayRef
+      consoleOverlayRef,
+      isStartDisabled,
+      isStopDisabled,
     };
   },
 };
