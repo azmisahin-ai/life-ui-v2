@@ -8,6 +8,7 @@ defineProps({
   <div class="widget">
 
     <h4>{{ title }}</h4>
+    {{ data }}
   </div>
 </template>
 

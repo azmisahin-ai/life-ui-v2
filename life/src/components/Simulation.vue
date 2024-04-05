@@ -14,9 +14,9 @@
 
 
       <div class="information-overlay">
-        <Widget class="simulation-status" title="Simulation Status" :data="simulationData"></Widget>
-        <Widget class="sampler-status" title="Sampler Status" :data="simulationData"></Widget>
-        <Widget class="instance-status" title="Instance Status" :data="simulationData"></Widget>
+        <Widget class="simulation-status" title="Simulation Status" :data="simulationStatus"></Widget>
+        <Widget class="sampler-status" title="Sampler Status" :data="samplerStatus"></Widget>
+        <Widget class="instance-status" title="Instance Status" :data="instanceStatus"></Widget>
       </div>
 
     </panel>
@@ -26,7 +26,7 @@
 
         <div class="widget socket">
           <label>Program Address</label>
-          <input v-model="programAddress" name="program_address" type="url" placeholder="http://127.0.0.1:8080">
+          <input v-model="programAddress" name="program_address" type="url" placeholder="ws://example.com">
           <button @click="toggleConnection" :class="{ connected: isConnected }">
             {{ isConnected ? 'Disconnect' : 'Connect' }}
           </button>
@@ -88,6 +88,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import io from 'socket.io-client';
 
 defineProps({
   title: String,
@@ -112,43 +113,63 @@ const updateValue = (event, variableName) => {
   values[variableName].value = event.target.value;
 };
 
-const simulationData = ref({
-  simulationStatus: '',
-  samplerStatus: '',
-  instanceStatus: '',
-});
-
-const consoleData = ref([]);
 
 const programAddress = ref('');
+const socket = ref(null);
 const isConnected = ref(false);
+const consoleData = ref([]);
+const simulationStatus = ref('');
+const samplerStatus = ref('');
+const instanceStatus = ref('');
 
 const toggleConnection = () => {
   if (isConnected.value) {
-    // Disconnect
     disconnectSocket();
   } else {
-    // Connect
     connectSocket();
   }
 };
 
 const connectSocket = () => {
-  // Simulate connection (for demonstration purposes)
-  console.log('Connecting to', programAddress.value);
-  // Perform actual connection logic here
+  // Bağlantıyı kur
+  if (programAddress.value) {
+    socket.value = io(programAddress.value);
 
-  // Update connection status
-  isConnected.value = true;
+    // Bağlantı başarılı
+    socket.value.on('connect', () => {
+      console.log('Connected to socket server:', programAddress.value);
+      isConnected.value = true;
+
+      // Kanalları dinle
+      socket.value.on('simulation_status', (data) => {
+        simulationStatus.value = data;
+      });
+
+      socket.value.on('simulation_sampler_status', (data) => {
+        samplerStatus.value = data;
+      });
+
+      socket.value.on('simulation_instance_status', (data) => {
+        instanceStatus.value = data;
+      });
+    });
+
+    // Bağlantı hatası
+    socket.value.on('connect_error', (error) => {
+      console.error('Socket connection error:', error);
+      disconnectSocket();
+    });
+  }
 };
 
 const disconnectSocket = () => {
-  // Simulate disconnection (for demonstration purposes)
-  console.log('Disconnecting from', programAddress.value);
-  // Perform actual disconnection logic here
-
-  // Update connection status
-  isConnected.value = false;
+  // Bağlantıyı kapat
+  if (socket.value) {
+    socket.value.disconnect();
+    socket.value = null;
+    isConnected.value = false;
+    console.log('Disconnected from socket server');
+  }
 };
 
 </script>
@@ -163,7 +184,6 @@ export default {
   setup() {
     // Veriler değiştiğinde Widget bileşenleri güncellenecek
     return {
-      simulationData,
       consoleData,
     };
   },
