@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
 import io from 'socket.io-client';
+import axios from 'axios';
 
 defineProps({
   title: String,
@@ -96,6 +97,103 @@ const disconnectSocket = () => {
   }
 };
 
+const startSimulation = async () => {
+  try {
+    // POST request to start simulation
+    const response = await axios.post(`${programAddress.value}/socket/v1/simulation/start`, {
+      simulation_type: 'Core',
+      simulation_status: 'Running'
+    });
+
+    // Check if request was successful
+    if (response.status === 200) {
+      simulationStatus.value = 'Running'; // Update simulation status
+      // Enable other buttons based on simulation status
+      enableButtons();
+    } else {
+      // Handle error if request was not successful
+      console.error('Failed to start simulation');
+    }
+  } catch (error) {
+    console.error('Error starting simulation:', error);
+  }
+};
+
+const pauseSimulation = async () => {
+  try {
+    // GET request to pause simulation
+    const response = await axios.get(`${programAddress.value}/socket/v1/simulation/pause`, {
+      params: {
+        simulation_type: 'Core',
+        simulation_status: 'Paused'
+      }
+    });
+
+    // Handle response and update simulation status
+    if (response.status === 200) {
+      simulationStatus.value = 'Paused';
+    }
+  } catch (error) {
+    console.error('Error pausing simulation:', error);
+  }
+};
+
+const resumeSimulation = async () => {
+  try {
+    // GET request to resume simulation
+    const response = await axios.get(`${programAddress.value}/socket/v1/simulation/continue`, {
+      params: {
+        simulation_type: 'Core',
+        simulation_status: 'Resumed'
+      }
+    });
+
+    // Handle response and update simulation status
+    if (response.status === 200) {
+      simulationStatus.value = 'Resumed';
+    }
+  } catch (error) {
+    console.error('Error resuming simulation:', error);
+  }
+};
+
+const stopSimulation = async () => {
+  try {
+    // GET request to stop simulation
+    const response = await axios.get(`${programAddress.value}/socket/v1/simulation/stop`, {
+      params: {
+        simulation_type: 'Core',
+        simulation_status: 'Stopped'
+      }
+    });
+
+    // Handle response and update simulation status
+    if (response.status === 200) {
+      simulationStatus.value = 'Stopped';
+      // Disable other buttons when simulation is stopped
+      disableButtons();
+    }
+  } catch (error) {
+    console.error('Error stopping simulation:', error);
+  }
+};
+
+const enableButtons = () => {
+  // Enable pause, resume and stop buttons when simulation is running
+  // Assuming these buttons are defined as refs or reactive variables
+  // Example: pauseButton.disabled = false;
+  //          resumeButton.disabled = false;
+  //          stopButton.disabled = false;
+};
+
+const disableButtons = () => {
+  // Disable pause, resume and stop buttons when simulation is stopped
+  // Assuming these buttons are defined as refs or reactive variables
+  // Example: pauseButton.disabled = true;
+  //          resumeButton.disabled = true;
+  //          stopButton.disabled = true;
+};
+
 </script>
 
 <template>
@@ -160,10 +258,18 @@ const disconnectSocket = () => {
         </div>
 
         <div class="widget action">
-          <button name="start">Start</button>
-          <button name="pause">Pause</button>
-          <button name="resume">Resume</button>
-          <button name="stop">Stop</button>
+          <button @click="startSimulation" :disabled="simulationStatus === 'Running'">
+            Start
+          </button>
+          <button @click="pauseSimulation" :disabled="simulationStatus !== 'Running'">
+            Pause
+          </button>
+          <button @click="resumeSimulation" :disabled="simulationStatus !== 'Paused'">
+            Resume
+          </button>
+          <button @click="stopSimulation" :disabled="simulationStatus !== 'Running' && simulationStatus !== 'Paused'">
+            Stop
+          </button>
         </div>
 
         <div class="widget formula">
