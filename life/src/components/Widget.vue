@@ -1,13 +1,13 @@
 <script setup>
 defineProps({
   title: String,
+  data: String,
 });
 </script>
 <template>
   <div class="widget">
 
     <h4>{{ title }}</h4>
-
   </div>
 </template>
 

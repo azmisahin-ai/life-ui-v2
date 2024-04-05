@@ -1,36 +1,102 @@
 <template>
   <div class="simulation">
-    <div class="panel main">
+
+    <panel class="panel main">
+
       <div class="title-overlay">
         <Widget class="title" title="Simulation"></Widget>
       </div>
+
       <div class="canvas-container">
         <Widget class="canvas" title=""></Widget>
       </div>
+
       <div class="console-overlay">
         <Widget class="console" title="console"></Widget>
       </div>
+
       <div class="information-overlay">
         <Widget class="simulastion_status" title="Simulation Status"></Widget>
-        <Widget
-          class="simulastion_sampler_status"
-          title="Sampler Status"
-        ></Widget>
-        <Widget
-          class="simulastion_instance_status"
-          title="Instance Status"
-        ></Widget>
+        <Widget class="simulastion_sampler_status" title="Sampler Status"></Widget>
+        <Widget class="simulastion_instance_status" title="Instance Status"></Widget>
       </div>
-    </div>
-    <div class="panel sidebar">
-      <div class="toolbar">
-        <Widget title="program"></Widget>
-        <Widget title="config"></Widget>
-        <Widget title="view"></Widget>
-        <Widget title="action"></Widget>
-        <Widget title="formula"></Widget>
-      </div>
-    </div>
+
+    </panel>
+
+    <panel class="panel sidebar">
+
+      <toolbar class="toolbar">
+
+        <div class="widget socket">
+          <div class="input-group">
+            <label>Program Address</label>
+            <input name="program_address" type="url" placeholder="http://"> </input>
+          </div>
+          <div class="input-group">
+            <button name="connect">Connect</button>
+          </div>
+        </div>
+
+        <div class="widget simulations">
+
+          <div class="tab core">
+            <div class="input-group">
+              <label>Number of instance</label>
+              <input name="number_of_instance" type="range" min="1" max="100" step="1"> </input>
+            </div>
+            <div class="input-group">
+              <label>Lifetime</label>
+              <input name="lifetime_seconds" type="range" min="0.1" max="60.0" step="0.1"> </input>
+            </div>
+            <div class="input-group">
+              <label>Number of replicas</label>
+              <input name="number_of_replicas" type="range" min="1" max="10" step="1"> </input>
+            </div>
+            <div class="input-group">
+              <label>Number of generation</label>
+              <input name="number_of_generation" type="range" min="1" max="10" step="1"> </input>
+            </div>
+            <div class="input-group">
+              <label>Maximum Match Limit</label>
+              <input name="max_match_limit" type="range" min="1" max="10" step="1"> </input>
+            </div>
+          </div>
+          <div class="tab particles"></div>
+
+        </div>
+
+        <div class="widget appearance">
+          <label>Appearance</label>
+          <select name="appearance">
+            <option selected>Simulation</option>
+            <option>Directory Tree</option>
+            <option>Family Tree</option>
+          </select>
+        </div>
+
+        <div class="widget action">
+          <div class="input-group">
+            <button name="start">Start</button>
+            <button name="pause">Pause</button>
+            <button name="resume">Resume</button>
+            <button name="stop">Stop</button>
+          </div>
+        </div>
+
+        <div class="widget formula">
+          <div class="input-group">
+            <label>Formula</label>
+            <textarea name="formula" placeholder="5.5 * self.generation"> </textarea>
+          </div>
+          <div class="input-group">
+            <button name="apply">Apply</button>
+          </div>
+        </div>
+
+      </toolbar>
+
+    </panel>
+
   </div>
 </template>
 
@@ -70,7 +136,7 @@ body {
 }
 
 .panel {
- 
+
   display: flex;
   flex-direction: column;
   /* Arrange panel contents vertically */
@@ -107,7 +173,6 @@ body {
   height: 20%;
   /* Set fixed height for the console */
   position: absolute;
-
   bottom: 0;
   width: 100%;
   /* Width of information panel */
@@ -127,8 +192,7 @@ body {
   position: absolute;
   top: 0;
   right: 0;
-  bottom: 0;
-  width: 30%;
+  width: 25%;
   /* Width of information panel */
   background-color: rgba(255, 255, 255, 0.297);
   /* Transparent white background */
@@ -136,7 +200,7 @@ body {
 }
 
 .sidebar {
-  flex: 0 0 30%;
+  flex: 0 0 25%;
   /* Fixed width for sidebar */
   display: flex;
   flex-direction: column;
