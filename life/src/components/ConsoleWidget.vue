@@ -1,7 +1,7 @@
 <template>
   <div class="console-widget">
-    <h3>{{ title }}</h3>
-    <div class="console-messages" ref="consoleMessages" style="height: 100%; overflow-y: auto;">
+    <h4>{{ title }}</h4>
+    <div class="console-messages" ref="consoleMessages" style="height: 200px; overflow-y: hidden;">
       <div v-for="(item, index) in messages" :key="index" class="console-message" :class="item.type">
         {{ item.message }}
       </div>
@@ -20,6 +20,13 @@ export default {
       return this.data || [];
     }
   },
+  watch: {
+    data(newVal) {
+      this.$nextTick(() => {
+        this.scrollToBottom();
+      });
+    }
+  },
   mounted() {
     this.scrollToBottom(); // Component is mounted, scroll to bottom
   },
@@ -28,7 +35,6 @@ export default {
   },
   methods: {
     scrollToBottom() {
-      // Access the consoleMessages element and scroll to the bottom
       const consoleMessages = this.$refs.consoleMessages;
       consoleMessages.scrollTop = consoleMessages.scrollHeight;
     }
@@ -44,15 +50,23 @@ export default {
   border-radius: 5px;
 }
 
-.console-messages {
-  height: 100%;
-  overflow-y: auto;
+.console-message {
+  word-wrap: break-word;
+  /* Uzun kelimeleri otomatik olarak kır */
+  max-width: 100%;
+  /* En fazla genişlik belirle */
+  overflow: hidden;
+  /* Taşan içerikleri gizle */
+
+
+
 }
 
 .console-message {
   margin-bottom: 5px;
   padding: 5px;
   border-radius: 3px;
+  width: 100%;
 }
 
 .info {
@@ -63,5 +77,7 @@ export default {
   color: #e1b42e8c;
 }
 
-/* Add more styles for different message types if needed */
+h4 {
+  margin: 0.1em;
+}
 </style>

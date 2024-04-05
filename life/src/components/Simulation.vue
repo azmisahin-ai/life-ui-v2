@@ -321,7 +321,7 @@ const changeAppearance = (event) => {
         </div>
       </div>
 
-      <div class="console-overlay" ref="consoleOverlay" style="height: 200px; overflow-y: auto; color: white;">
+      <div class="console-overlay" ref="consoleOverlay">
         <ConsoleWidget class="console" :title="'Console'" :data="consoleData" />
       </div>
 
@@ -467,6 +467,7 @@ body {
   margin: 0;
   padding: 0;
   font-size: 16px;
+
 }
 
 /* Main simulation container */
@@ -481,6 +482,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: 10px;
+  overflow-y: hidden;
 }
 
 /* Main panel */
@@ -492,6 +494,7 @@ body {
   margin-right: 10px;
   flex: 1;
   /* Main panel takes up remaining space */
+
 }
 
 .appearance-container {
@@ -522,9 +525,8 @@ body {
   color: white;
   padding: 10px;
   flex: 0.25;
-  /* Console takes 25% of main panel height */
-  overflow-y: auto;
-  /* Enable vertical scrolling if needed */
+  overflow: hidden;
+
 }
 
 .information-overlay {
