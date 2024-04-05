@@ -227,6 +227,16 @@ const stopSimulation = async () => {
 const userFormula = ref('');
 const evaluatedFormula = ref('');
 const formulaError = ref(null);
+const evaluateFormula = (formula) => {
+  try {
+    const evaluated = vm.run(`return ${formula}`);
+    // Handle the evaluated result
+    return evaluated;
+  } catch (error) {
+    console.error('Error evaluating formula:', error);
+    throw new Error('Invalid formula');
+  }
+};
 
 const applyFormula = async () => {
   if (!isConnected.value) {
