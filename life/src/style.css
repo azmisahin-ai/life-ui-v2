@@ -3,3 +3,41 @@
   margin: 0;
   padding: 0;
 }
+/* Range slider thumb styling for Webkit (Chrome, Safari) */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Remove default appearance */
+  appearance: none;
+  width: 15px; /* Width of the thumb */
+  height: 15px; /* Height of the thumb */
+  background-color: #007bff; /* Color of the thumb */
+  border-radius: 50%; /* Make it round */
+  cursor: pointer;
+}
+
+/* Range slider thumb styling for Firefox */
+input[type="range"]::-moz-range-thumb {
+  width: 15px; /* Width of the thumb */
+  height: 15px; /* Height of the thumb */
+  background-color: #007bff; /* Color of the thumb */
+  border: none; /* Remove border */
+  border-radius: 50%; /* Make it round */
+  cursor: pointer;
+}
+
+/* Range slider track styling */
+input[type="range"] {
+  -webkit-appearance: none; /* Remove default styles */
+  appearance: none;
+  width: 100%; /* Full width of the range */
+  height: 8px; /* Height of the track */
+  background-color: #ddd; /* Color of the track */
+  border-radius: 5px; /* Rounded corners */
+  outline: none; /* Remove outline */
+  margin: 10px 0; /* Add some margin for spacing */
+}
+
+/* Range slider thumb styling for when active */
+input[type="range"]:active::-webkit-slider-thumb,
+input[type="range"]:active::-moz-range-thumb {
+  background-color: #0056b3; /* Change color when active */
+}
