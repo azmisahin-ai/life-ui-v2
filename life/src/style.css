@@ -41,3 +41,8 @@ input[type="range"]:active::-webkit-slider-thumb,
 input[type="range"]:active::-moz-range-thumb {
   background-color: #0056b3; /* Change color when active */
 }
+/* Etkisiz butonlar için stil */
+button[disabled] {
+  opacity: 0.5; /* Opaklık azaltma */
+  cursor: not-allowed; /* İmleci "not-allowed" olarak değiştirme */
+}
