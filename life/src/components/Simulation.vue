@@ -98,7 +98,13 @@ const disconnectSocket = () => {
 };
 
 const socketConnected = ref(false);
+
 const startSimulation = async () => {
+  if (!isConnected.value) {
+    console.error('Socket is not connected');
+    return;
+  }
+
   try {
     const response = await axios.post(`${programAddress.value}/socket/v1/simulation/start`, {
       simulation_type: 'Core',
@@ -111,7 +117,7 @@ const startSimulation = async () => {
 
     if (response.status === 200) {
       simulationStatus.value = 'Running';
-      enableButtons();
+      enableButtons(); // Etkinleştirme işlevini burada çağırın
     } else {
       console.error('Failed to start simulation');
     }
@@ -121,6 +127,11 @@ const startSimulation = async () => {
 };
 
 const pauseSimulation = async () => {
+  if (!isConnected.value) {
+    console.error('Socket is not connected');
+    return;
+  }
+
   try {
     const response = await axios.get(`${programAddress.value}/socket/v1/simulation/pause`);
 
@@ -133,6 +144,11 @@ const pauseSimulation = async () => {
 };
 
 const resumeSimulation = async () => {
+  if (!isConnected.value) {
+    console.error('Socket is not connected');
+    return;
+  }
+
   try {
     const response = await axios.get(`${programAddress.value}/socket/v1/simulation/continue`);
 
@@ -145,12 +161,17 @@ const resumeSimulation = async () => {
 };
 
 const stopSimulation = async () => {
+  if (!isConnected.value) {
+    console.error('Socket is not connected');
+    return;
+  }
+
   try {
     const response = await axios.get(`${programAddress.value}/socket/v1/simulation/stop`);
 
     if (response.status === 200) {
       simulationStatus.value = 'Stopped';
-      disableButtons();
+      disableButtons(); // Devre dışı bırakma işlevini burada çağırın
     }
   } catch (error) {
     console.error('Error stopping simulation:', error);
