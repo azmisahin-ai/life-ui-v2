@@ -1,68 +1,44 @@
 <template>
   <div class="simulation">
-
     <panel class="panel main">
-
       <div class="title-overlay">
         <Widget class="title" title="Simulation"></Widget>
       </div>
-
       <div class="canvas-container">
         <Widget class="canvas" title=""></Widget>
       </div>
-
       <div class="console-overlay">
-        <Widget class="console" title="console"></Widget>
+        <Widget class="console" title="Console"></Widget>
       </div>
-
       <div class="information-overlay">
-        <Widget class="simulastion_status" title="Simulation Status"></Widget>
-        <Widget class="simulastion_sampler_status" title="Sampler Status"></Widget>
-        <Widget class="simulastion_instance_status" title="Instance Status"></Widget>
+        <Widget class="simulation-status" title="Simulation Status"></Widget>
+        <Widget class="sampler-status" title="Sampler Status"></Widget>
+        <Widget class="instance-status" title="Instance Status"></Widget>
       </div>
-
     </panel>
 
     <panel class="panel sidebar">
-
       <toolbar class="toolbar">
-
         <div class="widget socket">
-          <div class="input-group">
-            <label>Program Address</label>
-            <input name="program_address" type="url" placeholder="http://"> </input>
-          </div>
-          <div class="input-group">
-            <button name="connect">Connect</button>
-          </div>
+          <label>Program Address</label>
+          <input name="program_address" type="url" placeholder="http://">
+          <button name="connect">Connect</button>
         </div>
 
         <div class="widget simulations">
-
           <div class="tab core">
-            <div class="input-group">
-              <label>Number of instance</label>
-              <input name="number_of_instance" type="range" min="1" max="100" step="1"> </input>
-            </div>
-            <div class="input-group">
-              <label>Lifetime</label>
-              <input name="lifetime_seconds" type="range" min="0.1" max="60.0" step="0.1"> </input>
-            </div>
-            <div class="input-group">
-              <label>Number of replicas</label>
-              <input name="number_of_replicas" type="range" min="1" max="10" step="1"> </input>
-            </div>
-            <div class="input-group">
-              <label>Number of generation</label>
-              <input name="number_of_generation" type="range" min="1" max="10" step="1"> </input>
-            </div>
-            <div class="input-group">
-              <label>Maximum Match Limit</label>
-              <input name="max_match_limit" type="range" min="1" max="10" step="1"> </input>
-            </div>
+            <label>Number of Instances</label>
+            <input name="number_of_instance" type="range" min="1" max="100" step="1">
+            <label>Lifetime</label>
+            <input name="lifetime_seconds" type="range" min="0.1" max="60.0" step="0.1">
+            <label>Number of Replicas</label>
+            <input name="number_of_replicas" type="range" min="1" max="10" step="1">
+            <label>Number of Generations</label>
+            <input name="number_of_generation" type="range" min="1" max="10" step="1">
+            <label>Maximum Match Limit</label>
+            <input name="max_match_limit" type="range" min="1" max="10" step="1">
           </div>
           <div class="tab particles"></div>
-
         </div>
 
         <div class="widget appearance">
@@ -75,30 +51,22 @@
         </div>
 
         <div class="widget action">
-          <div class="input-group">
-            <button name="start">Start</button>
-            <button name="pause">Pause</button>
-            <button name="resume">Resume</button>
-            <button name="stop">Stop</button>
-          </div>
+          <button name="start">Start</button>
+          <button name="pause">Pause</button>
+          <button name="resume">Resume</button>
+          <button name="stop">Stop</button>
         </div>
 
         <div class="widget formula">
-          <div class="input-group">
-            <label>Formula</label>
-            <textarea name="formula" placeholder="5.5 * self.generation"> </textarea>
-          </div>
-          <div class="input-group">
-            <button name="apply">Apply</button>
-          </div>
+          <label>Formula</label>
+          <textarea name="formula" placeholder="5.5 * self.generation"></textarea>
+          <button name="apply">Apply</button>
         </div>
-
       </toolbar>
-
     </panel>
-
   </div>
 </template>
+
 
 <script setup>
 defineProps({
@@ -115,99 +83,112 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* Reset default margin and padding */
-html,
-body {
-  background-color: rgb(212, 207, 207);
+html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-size: 1em;
+  font-size: 16px;
 }
 
-/* Ensure the simulation div fills the entire viewport */
+/* Main simulation container */
 .simulation {
-  width: 100%;
-  height: 100%;
   display: flex;
-  flex-direction: row;
-  /* Arrange panels horizontally */
+  height: 100%;
 }
 
+/* Panels */
 .panel {
-
+  flex: 1;
   display: flex;
   flex-direction: column;
-  /* Arrange panel contents vertically */
-  flex: 1;
-  /* Each panel takes up equal space */
-  overflow: hidden;
-  /* Prevent content overflow */
+  padding: 10px;
 }
 
+/* Main panel */
 .main {
   position: relative;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-right: 10px;
 }
 
 .title-overlay {
-  position: absolute;
-  top: 0;
-  right: 30%;
-  left: 30%;
-  width: 30%;
-  /* Width of information panel */
-  background-color: rgba(113, 113, 116, 0.242);
-  /* Transparent white background */
-  padding: 0.2em;
+  background-color: #ccc;
+  padding: 10px;
+  text-align: center;
 }
 
 .canvas-container {
   flex: 1;
-  /* Take remaining vertical space */
   position: relative;
-  /* Ensure relative positioning for absolute children */
-}
-
-.console-overlay {
-  height: 20%;
-  /* Set fixed height for the console */
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Width of information panel */
-  background-color: rgba(45, 41, 41, 0.538);
-  /* Transparent white background */
-  padding: 0.2em;
-  color: white;
 }
 
 .canvas {
   width: 100%;
   height: 100%;
-  /* Fill canvas-container height */
+}
+
+.console-overlay {
+  background-color: #333;
+  color: white;
+  padding: 10px;
 }
 
 .information-overlay {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 10px;
+  right: 10px;
   width: 25%;
-  /* Width of information panel */
-  background-color: rgba(255, 255, 255, 0.297);
-  /* Transparent white background */
-  padding: 0.2em;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 5px;
 }
 
+/* Sidebar panel */
 .sidebar {
-  flex: 0 0 25%;
-  /* Fixed width for sidebar */
-  display: flex;
-  flex-direction: column;
+  width: 25%;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow-y: auto;
 }
 
 .toolbar {
-  flex: 1;
-  /* Fill sidebar height */
+  padding: 10px;
+}
+
+.widget {
+  margin-bottom: 20px;
+}
+
+.widget label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.widget input,
+.widget select,
+.widget textarea {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.widget button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.widget button:hover {
+  background-color: #0056b3;
 }
 </style>
+
