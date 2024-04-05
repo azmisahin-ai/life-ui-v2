@@ -1,5 +1,3 @@
-<!-- ConsoleWidget.vue -->
-
 <template>
   <div class="console-widget">
     <h3>{{ title }}</h3>
@@ -22,18 +20,17 @@ export default {
       return this.data || [];
     }
   },
-
   mounted() {
-    // Scroll to bottom when component is mounted or data changes
-    this.scrollToBottom();
+    this.scrollToBottom(); // Component is mounted, scroll to bottom
   },
   updated() {
-    // Scroll to bottom when component is updated (e.g., new messages added)
-    this.scrollToBottom();
+    this.scrollToBottom(); // Component is updated, scroll to bottom
   },
   methods: {
     scrollToBottom() {
-      this.$refs.consoleMessages.scrollTop = this.$refs.consoleMessages.scrollHeight;
+      // Access the consoleMessages element and scroll to the bottom
+      const consoleMessages = this.$refs.consoleMessages;
+      consoleMessages.scrollTop = consoleMessages.scrollHeight;
     }
   }
 };
