@@ -8,7 +8,7 @@
         <Widget class="canvas" title=""></Widget>
       </div>
 
-      <div class="console-overlay">
+      <div class="console-overlay" ref="consoleOverlay" style="height: 200px; overflow-y: auto; color: white;">
         <Widget class="console" title="Console" :data="consoleData"></Widget>
       </div>
 
@@ -77,7 +77,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import io from 'socket.io-client';
 
 defineProps({
@@ -110,6 +110,24 @@ const simulationStatus = ref('');
 const samplerStatus = ref('');
 const instanceStatus = ref('');
 
+const consoleOverlayRef = ref(null); // Template ref for console-overlay
+
+const addDataToConsole = (data) => {
+  consoleData.value.push(data);
+  scrollConsoleToBottom();
+};
+
+const scrollConsoleToBottom = () => {
+  if (consoleOverlayRef.value) {
+    consoleOverlayRef.value.scrollTop = consoleOverlayRef.value.scrollHeight;
+  }
+};
+
+// Watch for changes in consoleData and scroll to bottom automatically
+watchEffect(() => {
+  scrollConsoleToBottom();
+});
+
 const toggleConnection = () => {
   if (isConnected.value) {
     disconnectSocket();
@@ -136,7 +154,7 @@ const connectSocket = () => {
 
       socket.value.on('simulation_instance_status', (data) => {
         instanceStatus.value = data;
-        consoleData.value.push(data);
+        addDataToConsole(data);
       });
     });
 
@@ -168,6 +186,7 @@ export default {
   setup() {
     return {
       consoleData,
+      consoleOverlayRef
     };
   },
 };
