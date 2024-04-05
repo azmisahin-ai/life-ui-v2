@@ -336,7 +336,15 @@ const changeAppearance = (event) => {
           :numberOfInstancesMatched="samplerStatus.number_of_instance_matched"
           :numberOfInstancesReplicated="samplerStatus.number_of_instance_replicated" />
 
-        <Widget class="instance-status" title="Instance Status" :data="instanceStatus"></Widget>
+        <InstanceStatusWidget class="instance-status" :name="instanceStatus.name" :id="instanceStatus.id"
+          :parentId="instanceStatus.parent_id" :lifetimeSeconds="instanceStatus.lifetime_seconds"
+          :lifeCreatedTime="instanceStatus.life_created_time" :lifeStartTime="instanceStatus.life_start_time"
+          :elapsedLifespan="instanceStatus.elapsed_lifespan" :lifecycle="instanceStatus.lifecycle"
+          :lifeStatus="instanceStatus.life_status" :numberOfCopies="instanceStatus.number_of_copies"
+          :generation="instanceStatus.generation" :matchCount="instanceStatus.match_count"
+          :fitness="instanceStatus.fitness" />
+
+
       </div>
     </div>
 
@@ -449,12 +457,14 @@ import Widget from "./Widget.vue";
 import ConsoleWidget from './ConsoleWidget.vue';
 import SimulationStatusWidget from './SimulationStatusWidget.vue';
 import SamplerStatusWidget from './SamplerStatusWidget.vue';
+import InstanceStatusWidget from './InstanceStatusWidget.vue';
 export default {
   components: {
     Widget,
     ConsoleWidget,
     SimulationStatusWidget,
-    SamplerStatusWidget
+    SamplerStatusWidget,
+    InstanceStatusWidget
   },
   setup() {
     return {
