@@ -325,28 +325,26 @@ const changeAppearance = (event) => {
         <ConsoleWidget class="console" :title="'Console'" :data="consoleData" />
       </div>
 
-      <div class="information-overlay">
 
-        <SimulationStatusWidget class="widget" :simulationType="simulationStatus.simulation_type"
-          :simulationStatus="simulationStatus.simulation_status" />
-
-        <SamplerStatusWidget class="widget" :name="samplerStatus.name"
-          :numberOfInstances="samplerStatus.number_of_instance" :lifetimeSeconds="samplerStatus.lifetime_seconds"
-          :lifecycle="samplerStatus.lifecycle" :numberOfInstancesCreated="samplerStatus.number_of_instance_created"
-          :numberOfInstancesMatched="samplerStatus.number_of_instance_matched"
-          :numberOfInstancesReplicated="samplerStatus.number_of_instance_replicated" />
-
-        <InstanceStatusWidget class="widget" :id="instanceStatus.id" :parentId="instanceStatus.parent_id"
-          :lifetimeSeconds="instanceStatus.lifetime_seconds" :lifeCreatedTime="instanceStatus.life_created_time"
-          :lifeStartTime="instanceStatus.life_start_time" :elapsedLifespan="instanceStatus.elapsed_lifespan"
-          :lifecycle="instanceStatus.lifecycle" :lifeStatus="instanceStatus.life_status"
-          :numberOfCopies="instanceStatus.number_of_copies" :generation="instanceStatus.generation"
-          :matchCount="instanceStatus.match_count" :fitness="instanceStatus.fitness" />
-
-
-      </div>
     </div>
+    <div class="widget-container">
+      <SimulationStatusWidget class="widget" :simulationType="simulationStatus.simulation_type"
+        :simulationStatus="simulationStatus.simulation_status" />
 
+      <SamplerStatusWidget class="widget" :name="samplerStatus.name"
+        :numberOfInstances="samplerStatus.number_of_instance" :lifetimeSeconds="samplerStatus.lifetime_seconds"
+        :lifecycle="samplerStatus.lifecycle" :numberOfInstancesCreated="samplerStatus.number_of_instance_created"
+        :numberOfInstancesMatched="samplerStatus.number_of_instance_matched"
+        :numberOfInstancesReplicated="samplerStatus.number_of_instance_replicated" />
+
+      <InstanceStatusWidget class="widget" :id="instanceStatus.id" :parentId="instanceStatus.parent_id"
+        :lifetimeSeconds="instanceStatus.lifetime_seconds" :lifeCreatedTime="instanceStatus.life_created_time"
+        :lifeStartTime="instanceStatus.life_start_time" :elapsedLifespan="instanceStatus.elapsed_lifespan"
+        :lifecycle="instanceStatus.lifecycle" :lifeStatus="instanceStatus.life_status"
+        :numberOfCopies="instanceStatus.number_of_copies" :generation="instanceStatus.generation"
+        :matchCount="instanceStatus.match_count" :fitness="instanceStatus.fitness" />
+
+    </div>
     <!-- Sidebar panel -->
     <div class="panel sidebar">
 
@@ -503,7 +501,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: 10px;
-  overflow-y: hidden;
+  overflow-y: hidden
 }
 
 /* Main panel */
@@ -525,6 +523,10 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow-y: auto;
+  /* İçeriği kaydırılabilir yap */
+  height: 100%;
+  /* Yükseklik ayarı */
 }
 
 .canvas {
@@ -558,6 +560,7 @@ body {
   background-color: rgba(255, 255, 255, 0.8);
   padding: 10px;
   border-radius: 5px;
+
 }
 
 /* Sidebar panel */
@@ -630,5 +633,12 @@ body {
 .error-message {
   color: red;
   font-size: 12px;
+}
+
+.widget-container {
+
+  overflow-y: auto;
+  width: 12rem;
+  overflow-x: hidden
 }
 </style>

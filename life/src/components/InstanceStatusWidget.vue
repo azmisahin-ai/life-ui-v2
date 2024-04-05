@@ -2,40 +2,51 @@
     <div class="widget-container">
         <h3>{{ name }}</h3>
         <div class="status-item">
-            <p>ID: {{ id }}</p>
+            <p>ID: <b>{{ id }}</b></p>
         </div>
         <div class="status-item">
-            <p>Parent ID: {{ parentId }}</p>
+            <p>Parent ID:<b> {{ parentId }} </b> </p>
+
         </div>
         <div class="status-item">
-            <p>Lifetime (seconds): {{ lifetimeSeconds }}</p>
+            <p>Lifetime (seconds): </p>
+            <b>{{ lifetimeSeconds }}</b>
         </div>
         <div class="status-item">
-            <p>Life Created Time: {{ formattedTime(lifeCreatedTime) }}</p>
+            <p>Life Created Time: </p>
+            <b>{{ formattedTime(lifeCreatedTime) }}</b>
         </div>
         <div class="status-item">
-            <p>Life Start Time: {{ formattedTime(lifeStartTime) }}</p>
+            <p>Life Start Time: </p>
+            <b>{{ formattedTime(lifeStartTime) }}</b>
         </div>
         <div class="status-item">
-            <p>Elapsed Lifespan: {{ elapsedLifespan }}</p>
+            <p>Elapsed Lifespan: </p>
+            <b>{{ elapsedLifespan }}</b>
         </div>
         <div class="status-item">
-            <p>Life Cycle: {{ lifecycle }}</p>
+            <p>Life Cycle: </p>
+            <b>{{ lifecycle }}</b>
         </div>
         <div class="status-item">
-            <p>Life Status: {{ lifeStatus }}</p>
+            <p>Life Status: </p>
+            <b>{{ lifeStatus }}</b>
         </div>
         <div class="status-item">
-            <p>Number of Copies: {{ numberOfCopies }}</p>
+            <p>Number of Copies: </p>
+            <b>{{ numberOfCopies }}</b>
         </div>
         <div class="status-item">
-            <p>Generation: {{ generation }}</p>
+            <p>Generation: </p>
+            <b>{{ generation }}</b>
         </div>
         <div class="status-item">
-            <p>Match Count: {{ matchCount }}</p>
+            <p>Match Count: </p>
+            <b>{{ matchCount }}</b>
         </div>
         <div class="status-item">
-            <p>Fitness: {{ fitness }}</p>
+            <p>Fitness: </p>
+            <b>{{ fitness }}</b>
         </div>
     </div>
 </template>

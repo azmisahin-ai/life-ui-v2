@@ -2,22 +2,28 @@
     <div class="widget-container">
         <h3>{{ name }}</h3>
         <div class="status-item">
-            <p>Number of Instances: {{ numberOfInstances }}</p>
+            <p>Number of Instances: </p>
+            <b>{{ numberOfInstances }}</b>
         </div>
         <div class="status-item">
-            <p>Lifetime (seconds): {{ lifetimeSeconds }}</p>
+            <p>Lifetime (seconds): </p>
+            <b>{{ lifetimeSeconds }}</b>
         </div>
         <div class="status-item">
-            <p>Life Cycle: {{ lifecycle }}</p>
+            <p>Life Cycle: </p>
+            <b>{{ lifecycle }}</b>
         </div>
         <div class="status-item">
-            <p>Instances Created: {{ numberOfInstancesCreated }}</p>
+            <p>Instances Created:</p>
+            <b> {{ numberOfInstancesCreated }}</b>
         </div>
         <div class="status-item">
-            <p>Instances Matched: {{ numberOfInstancesMatched }}</p>
+            <p>Instances Matched: </p>
+            <b>{{ numberOfInstancesMatched }}</b>
         </div>
         <div class="status-item">
-            <p>Instances Replicated: {{ numberOfInstancesReplicated }}</p>
+            <p>Instances Replicated: </p>
+            <b>{{ numberOfInstancesReplicated }}</b>
         </div>
     </div>
 </template>
@@ -53,30 +59,31 @@ h3 {
 .status-item {
     margin-bottom: 8px;
 }
+
 /* Özel stiller burada tanımlanır */
 .widget-container {
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 10px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .widget-container h3 {
-  margin-bottom: 10px;
-  color: #007bff;
+    margin-bottom: 10px;
+    color: #007bff;
 }
 
 .status-item {
-  margin-bottom: 8px;
+    margin-bottom: 8px;
 }
 
 .status-label {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .status-value {
-  color: #333;
+    color: #333;
 }
 </style>
