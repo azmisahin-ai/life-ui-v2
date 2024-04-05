@@ -327,22 +327,21 @@ const changeAppearance = (event) => {
 
       <div class="information-overlay">
 
-        <SimulationStatusWidget class="simulation-status" :simulationType="simulationStatus.simulation_type"
+        <SimulationStatusWidget class="widget" :simulationType="simulationStatus.simulation_type"
           :simulationStatus="simulationStatus.simulation_status" />
 
-        <SamplerStatusWidget class="sampler-status" :name="samplerStatus.name"
+        <SamplerStatusWidget class="widget" :name="samplerStatus.name"
           :numberOfInstances="samplerStatus.number_of_instance" :lifetimeSeconds="samplerStatus.lifetime_seconds"
           :lifecycle="samplerStatus.lifecycle" :numberOfInstancesCreated="samplerStatus.number_of_instance_created"
           :numberOfInstancesMatched="samplerStatus.number_of_instance_matched"
           :numberOfInstancesReplicated="samplerStatus.number_of_instance_replicated" />
 
-        <InstanceStatusWidget class="instance-status" :name="instanceStatus.name" :id="instanceStatus.id"
-          :parentId="instanceStatus.parent_id" :lifetimeSeconds="instanceStatus.lifetime_seconds"
-          :lifeCreatedTime="instanceStatus.life_created_time" :lifeStartTime="instanceStatus.life_start_time"
-          :elapsedLifespan="instanceStatus.elapsed_lifespan" :lifecycle="instanceStatus.lifecycle"
-          :lifeStatus="instanceStatus.life_status" :numberOfCopies="instanceStatus.number_of_copies"
-          :generation="instanceStatus.generation" :matchCount="instanceStatus.match_count"
-          :fitness="instanceStatus.fitness" />
+        <InstanceStatusWidget class="widget" :id="instanceStatus.id" :parentId="instanceStatus.parent_id"
+          :lifetimeSeconds="instanceStatus.lifetime_seconds" :lifeCreatedTime="instanceStatus.life_created_time"
+          :lifeStartTime="instanceStatus.life_start_time" :elapsedLifespan="instanceStatus.elapsed_lifespan"
+          :lifecycle="instanceStatus.lifecycle" :lifeStatus="instanceStatus.life_status"
+          :numberOfCopies="instanceStatus.number_of_copies" :generation="instanceStatus.generation"
+          :matchCount="instanceStatus.match_count" :fitness="instanceStatus.fitness" />
 
 
       </div>
