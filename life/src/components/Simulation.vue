@@ -360,8 +360,16 @@ const applyFormula = async () => {
 
           <label>Formula</label>
 
-          <textarea v-model="userFormula" name="formula" placeholder="5.5 * self.generation"
-            title="It safely evaluates the formula entered by the user and updates its life time."></textarea>
+          <input type="text" v-model="userFormula" name="formula" placeholder="5.5 * self.generation"
+            title="It safely evaluates the formula entered by the user and updates its life time."
+            list="formula-suggestions"></input>
+
+          <datalist id="formula-suggestions">
+            <option value="5.5 * self.generation"></option>
+            <option value="Math.pow(self.generation, 2)"></option>
+            <option value="Math.sin(self.generation)"></option>
+            <!-- Add more example formulas -->
+          </datalist>
 
           <span v-if="formulaError" class="error-message">{{ formulaError }}</span>
 
