@@ -7,14 +7,18 @@
         </div>
         <Widget class="canvas" title=""></Widget>
       </div>
+
       <div class="console-overlay">
-        <Widget class="console" title="Console"></Widget>
+        <Widget class="console" title="Console" :data="consoleData"></Widget>
       </div>
+
+
       <div class="information-overlay">
-        <Widget class="simulation-status" title="Simulation Status"></Widget>
-        <Widget class="sampler-status" title="Sampler Status"></Widget>
-        <Widget class="instance-status" title="Instance Status"></Widget>
+        <Widget class="simulation-status" title="Simulation Status" :data="simulationData"></Widget>
+        <Widget class="sampler-status" title="Sampler Status" :data="simulationData"></Widget>
+        <Widget class="instance-status" title="Instance Status" :data="simulationData"></Widget>
       </div>
+
     </panel>
 
     <panel class="panel sidebar">
@@ -86,6 +90,14 @@ defineProps({
   title: String,
 });
 
+const simulationData = ref({
+  simulationStatus: '',
+  samplerStatus: '',
+  instanceStatus: '',
+});
+
+const consoleData = ref([]);
+
 // Vue 3 ref ile yeni değişkenler oluşturuyoruz
 const numberOfInstances = ref(1);
 const lifetimeSeconds = ref(0.1);
@@ -113,6 +125,13 @@ import Widget from "./Widget.vue";
 export default {
   components: {
     Widget,
+  },
+  setup() {
+    // Veriler değiştiğinde Widget bileşenleri güncellenecek
+    return {
+      simulationData,
+      consoleData,
+    };
   },
 };
 </script>
