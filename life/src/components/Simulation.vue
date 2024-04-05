@@ -9,6 +9,7 @@ const { title } = defineProps({
 
 const numberOfInstances = ref(1);
 const lifetimeSeconds = ref(0.1);
+const lifecycle = ref(0.1);
 const numberOfReplicas = ref(1);
 const numberOfGeneration = ref(1);
 const maxMatchLimit = ref(1);
@@ -45,6 +46,9 @@ const updateValue = (event, variableName) => {
       break;
     case 'lifetimeSeconds':
       lifetimeSeconds.value = parseFloat(event.target.value);
+      break;
+    case 'lifecycle':
+      lifecycle.value = parseFloat(event.target.value);
       break;
     case 'numberOfReplicas':
       numberOfReplicas.value = parseInt(event.target.value);
@@ -131,6 +135,7 @@ const startSimulation = async () => {
       simulation_type: 'Core',
       number_of_instances: numberOfInstances.value,
       lifetime_seconds: lifetimeSeconds.value,
+      lifecycle: lifecycle.value,
       number_of_replicas: numberOfReplicas.value,
       number_of_generation: numberOfGeneration.value,
       max_match_limit: maxMatchLimit.value
@@ -251,12 +256,15 @@ const stopSimulation = async () => {
         <!-- Simülasyon ayarları -->
         <div class="widget simulations">
           <div class="tab core">
-            <label for="number_of_instance">Number of Instances: {{ numberOfInstances }}</label>
-            <input name="number_of_instance" type="range" min="1" max="100" step="1" v-model="numberOfInstances"
+            <label for="number_of_instances">Number of Instances: {{ numberOfInstances }}</label>
+            <input name="number_of_instances" type="range" min="1" max="100" step="1" v-model="numberOfInstances"
               @input="updateValue($event, 'numberOfInstances')" />
             <label for="lifetime_seconds">Lifetime: {{ lifetimeSeconds }}</label>
             <input name="lifetime_seconds" type="range" min="0.1" max="60.0" step="0.1" v-model="lifetimeSeconds"
               @input="updateValue($event, 'lifetimeSeconds')" />
+            <label for="lifecycle">Lifecycle: {{ lifecycle }}</label>
+            <input name="lifecycle" type="range" min="0.1" max="60.0" step="0.1" v-model="lifecycle"
+              @input="updateValue($event, 'lifecycle')" />
             <label for="number_of_replicas">Number of Replicas: {{ numberOfReplicas }}</label>
             <input name="number_of_replicas" type="range" min="1" max="10" step="1" v-model="numberOfReplicas"
               @input="updateValue($event, 'numberOfReplicas')" />
