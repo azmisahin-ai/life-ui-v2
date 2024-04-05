@@ -93,22 +93,18 @@ const numberOfReplicas = ref(1);
 const numberOfGeneration = ref(1);
 const maxMatchLimmit = ref(1);
 
-// Değer değiştiğinde bu fonksiyon çağrılacak
-const updateValue = (event, variableName) => {
-  if (variableName === 'numberOfInstances') {
-    numberOfInstances.value = event.target.value;
-  } else if (variableName === 'lifetimeSeconds') {
-    lifetimeSeconds.value = parseFloat(event.target.value).toFixed(1);
-  } else if (variableName === 'numberOfReplicas') {
-    numberOfReplicas.value = event.target.value;
-  }
-  else if (variableName === 'numberOfGeneration') {
-    numberOfGeneration.value = event.target.value;
-  }
-  else if (variableName === 'maxMatchLimmit') {
-    maxMatchLimmit.value = event.target.value;
-  }
+const values = {
+  numberOfInstances: numberOfInstances,
+  lifetimeSeconds: lifetimeSeconds,
+  numberOfReplicas: numberOfReplicas,
+  numberOfGeneration: numberOfGeneration,
+  maxMatchLimmit: maxMatchLimmit,
 };
+
+const updateValue = (event, variableName) => {
+  values[variableName].value = event.target.value;
+};
+
 </script>
 
 <script>
