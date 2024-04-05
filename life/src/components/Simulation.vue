@@ -226,9 +226,22 @@ const stopSimulation = async () => {
 // Define ref value for evaluated formula
 const userFormula = ref('');
 const evaluatedFormula = ref('');
+const formulaError = ref(null);
+
 const applyFormula = async () => {
   if (!isConnected.value) {
     console.error('Socket is not connected');
+    return;
+  }
+
+  formulaError.value = null;
+
+  try {
+    // Check syntax without actually evaluating the formula
+    new Function(`return ${userFormula.value}`);
+  } catch (error) {
+    formulaError.value = 'Invalid formula syntax';
+    console.error('Invalid formula syntax:', error);
     return;
   }
 
@@ -344,11 +357,16 @@ const applyFormula = async () => {
           </button>
         </div>
         <div class="widget formula">
-          <label>Formula {{ evaluatedFormula }}</label>
+
+          <label>Formula</label>
+
           <textarea v-model="userFormula" name="formula" placeholder="5.5 * self.generation"
             title="It safely evaluates the formula entered by the user and updates its life time."></textarea>
+
+          <span v-if="formulaError" class="error-message">{{ formulaError }}</span>
+
           <button @click="applyFormula" :disabled="!isStartDisabled || isStopDisabled"
-            title="Transfers the process of applying the formula to all copies to the queue. Updates are made to each core that gives a signal in the time stream.">Apply</button>
+            title="Apply the formula to all copies.">Apply</button>
         </div>
       </toolbar>
     </panel>
@@ -513,5 +531,10 @@ body {
 .widget.socket button.connected {
   background-color: #dc3545;
   /* Red color when connected */
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
 }
 </style>
