@@ -27,16 +27,27 @@
 
         <div class="widget simulations">
           <div class="tab core">
-            <label>Number of Instances</label>
-            <input name="number_of_instance" type="range" min="1" max="100" step="1">
-            <label>Lifetime</label>
-            <input name="lifetime_seconds" type="range" min="0.1" max="60.0" step="0.1">
-            <label>Number of Replicas</label>
-            <input name="number_of_replicas" type="range" min="1" max="10" step="1">
-            <label>Number of Generations</label>
-            <input name="number_of_generation" type="range" min="1" max="10" step="1">
-            <label>Maximum Match Limit</label>
-            <input name="max_match_limit" type="range" min="1" max="10" step="1">
+
+            <label for="number_of_instance">Number of Instances: {{ numberOfInstances }}</label>
+            <input name="number_of_instance" type="range" min="1" max="100" step="1" v-model="numberOfInstances"
+              @input="updateValue($event, 'numberOfInstances')">
+
+            <label for="lifetime_seconds">Lifetime: {{ lifetimeSeconds }}</label>
+            <input name="lifetime_seconds" type="range" min="0.1" max="60.0" step="0.1" v-model="lifetimeSeconds"
+              @input="updateValue($event, 'lifetimeSeconds')">
+
+            <label for="number_of_replicas">Number of Replicas: {{ numberOfReplicas }}</label>
+            <input name="number_of_replicas" type="range" min="1" max="10" step="1" v-model="numberOfReplicas"
+              @input="updateValue($event, 'numberOfReplicas')">
+
+            <label for="number_of_generation">Number of Generations: {{ numberOfGeneration }}</label>
+            <input name="number_of_generation" type="range" min="1" max="10" step="1" v-model="numberOfGeneration"
+              @input="updateValue($event, 'numberOfGeneration')">
+
+            <label for="max_match_limit">Maximum Match Limit: {{ maxMatchLimmit }}</label>
+            <input name="max_match_limit" type="range" min="1" max="10" step="1" v-model="maxMatchLimmit"
+              @input="updateValue($event, 'maxMatchLimmit')">
+
           </div>
           <div class="tab particles"></div>
         </div>
@@ -69,12 +80,39 @@
 
 
 <script setup>
+import { ref } from 'vue';
+
 defineProps({
   title: String,
 });
+
+// Vue 3 ref ile yeni değişkenler oluşturuyoruz
+const numberOfInstances = ref(1);
+const lifetimeSeconds = ref(0.1);
+const numberOfReplicas = ref(1);
+const numberOfGeneration = ref(1);
+const maxMatchLimmit = ref(1);
+
+// Değer değiştiğinde bu fonksiyon çağrılacak
+const updateValue = (event, variableName) => {
+  if (variableName === 'numberOfInstances') {
+    numberOfInstances.value = event.target.value;
+  } else if (variableName === 'lifetimeSeconds') {
+    lifetimeSeconds.value = parseFloat(event.target.value).toFixed(1);
+  } else if (variableName === 'numberOfReplicas') {
+    numberOfReplicas.value = event.target.value;
+  }
+  else if (variableName === 'numberOfGeneration') {
+    numberOfGeneration.value = event.target.value;
+  }
+  else if (variableName === 'maxMatchLimmit') {
+    maxMatchLimmit.value = event.target.value;
+  }
+};
 </script>
 
 <script>
+
 import Widget from "./Widget.vue";
 export default {
   components: {
