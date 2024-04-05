@@ -3,7 +3,7 @@ import { ref, watchEffect } from 'vue';
 import io from 'socket.io-client';
 import axios from 'axios';
 
-defineProps({
+const { title } = defineProps({
   title: String,
 });
 
@@ -11,19 +11,7 @@ const numberOfInstances = ref(1);
 const lifetimeSeconds = ref(0.1);
 const numberOfReplicas = ref(1);
 const numberOfGeneration = ref(1);
-const maxMatchLimmit = ref(1);
-
-const values = {
-  numberOfInstances,
-  lifetimeSeconds,
-  numberOfReplicas,
-  numberOfGeneration,
-  maxMatchLimmit,
-};
-
-const updateValue = (event, variableName) => {
-  values[variableName].value = event.target.value;
-};
+const maxMatchLimit = ref(1);
 
 const programAddress = ref('');
 const socket = ref(null);
@@ -33,7 +21,7 @@ const simulationStatus = ref('');
 const samplerStatus = ref('');
 const instanceStatus = ref('');
 
-const consoleOverlayRef = ref(null); // Template ref for console-overlay
+const consoleOverlayRef = ref(null);
 
 const addDataToConsole = (data) => {
   consoleData.value.push(data);
@@ -45,11 +33,34 @@ const scrollConsoleToBottom = () => {
     consoleOverlayRef.value.scrollTop = consoleOverlayRef.value.scrollHeight;
   }
 };
-
-// Watch for changes in consoleData and scroll to bottom automatically
+// Değişen değerler için izleyici ekleyelim
 watchEffect(() => {
   scrollConsoleToBottom();
 });
+
+const updateValue = (event, variableName) => {
+  switch (variableName) {
+    case 'numberOfInstances':
+      numberOfInstances.value = parseFloat(event.target.value);
+      break;
+    case 'lifetimeSeconds':
+      lifetimeSeconds.value = parseFloat(event.target.value);
+      break;
+    case 'numberOfReplicas':
+      numberOfReplicas.value = parseInt(event.target.value);
+      break;
+    case 'numberOfGeneration':
+      numberOfGeneration.value = parseInt(event.target.value);
+      break;
+    case 'maxMatchLimit':
+      maxMatchLimit.value = parseInt(event.target.value);
+      break;
+    default:
+      break;
+  }
+};
+
+
 
 const toggleConnection = () => {
   if (isConnected.value) {
@@ -97,8 +108,6 @@ const disconnectSocket = () => {
   }
 };
 
-const socketConnected = ref(false);
-
 const startSimulation = async () => {
   if (!isConnected.value) {
     console.error('Socket is not connected');
@@ -112,12 +121,12 @@ const startSimulation = async () => {
       lifetime_seconds: lifetimeSeconds.value,
       number_of_replicas: numberOfReplicas.value,
       number_of_generation: numberOfGeneration.value,
-      max_match_limit: maxMatchLimmit.value
+      max_match_limit: maxMatchLimit.value // Değişken adını düzelttim
     });
 
     if (response.status === 200) {
       simulationStatus.value = 'Running';
-      enableButtons(); // Etkinleştirme işlevini burada çağırın
+      enableButtons();
     } else {
       console.error('Failed to start simulation');
     }
@@ -171,7 +180,7 @@ const stopSimulation = async () => {
 
     if (response.status === 200) {
       simulationStatus.value = 'Stopped';
-      disableButtons(); // Devre dışı bırakma işlevini burada çağırın
+      disableButtons();
     }
   } catch (error) {
     console.error('Error stopping simulation:', error);
@@ -179,29 +188,26 @@ const stopSimulation = async () => {
 };
 
 const enableButtons = () => {
-  // Enable pause, resume and stop buttons when simulation is running
-  // Assuming you have references to these buttons
-  // Example: pauseButton.disabled = false;
-  //          resumeButton.disabled = false;
-  //          stopButton.disabled = false;
+  pauseButton.disabled = false;
+  resumeButton.disabled = false;
+  stopButton.disabled = false;
 };
 
 const disableButtons = () => {
-  // Disable pause, resume and stop buttons when simulation is stopped
-  // Assuming you have references to these buttons
-  // Example: pauseButton.disabled = true;
-  //          resumeButton.disabled = true;
-  //          stopButton.disabled = true;
+  pauseButton.disabled = true;
+  resumeButton.disabled = true;
+  stopButton.disabled = true;
 };
 
 </script>
 
 <template>
   <div class="simulation">
+    <!-- Main panel -->
     <panel class="panel main">
       <div class="canvas-container">
         <div class="title-overlay">
-          <Widget class="title" title="Simulation"></Widget>
+          <Widget class="title" :title="title"></Widget>
         </div>
         <Widget class="canvas" title=""></Widget>
       </div>
@@ -217,8 +223,10 @@ const disableButtons = () => {
       </div>
     </panel>
 
+    <!-- Sidebar panel -->
     <panel class="panel sidebar">
       <toolbar class="toolbar">
+        <!-- Socket bağlantısı -->
         <div class="widget socket">
           <label>Program Address</label>
           <input v-model="programAddress" name="program_address" type="url" placeholder="ws://example.com" />
@@ -227,6 +235,7 @@ const disableButtons = () => {
           </button>
         </div>
 
+        <!-- Simülasyon ayarları -->
         <div class="widget simulations">
           <div class="tab core">
             <label for="number_of_instance">Number of Instances: {{ numberOfInstances }}</label>
@@ -241,9 +250,9 @@ const disableButtons = () => {
             <label for="number_of_generation">Number of Generations: {{ numberOfGeneration }}</label>
             <input name="number_of_generation" type="range" min="1" max="10" step="1" v-model="numberOfGeneration"
               @input="updateValue($event, 'numberOfGeneration')" />
-            <label for="max_match_limit">Maximum Match Limit: {{ maxMatchLimmit }}</label>
-            <input name="max_match_limit" type="range" min="1" max="10" step="1" v-model="maxMatchLimmit"
-              @input="updateValue($event, 'maxMatchLimmit')" />
+            <label for="max_match_limit">Maximum Match Limit: {{ maxMatchLimit }}</label>
+            <input name="max_match_limit" type="range" min="1" max="10" step="1" v-model="maxMatchLimit"
+              @input="updateValue($event, 'maxMatchLimit')" />
           </div>
           <div class="tab particles"></div>
         </div>
@@ -256,9 +265,8 @@ const disableButtons = () => {
             <option>Family Tree</option>
           </select>
         </div>
-
         <div class="widget action">
-          <button @click="startSimulation" :disabled="!socketConnected || simulationStatus === 'Running'">
+          <button @click="startSimulation" :disabled="!isConnected || simulationStatus === 'Running'">
             Start
           </button>
           <button @click="pauseSimulation" :disabled="simulationStatus !== 'Running'">
@@ -271,7 +279,6 @@ const disableButtons = () => {
             Stop
           </button>
         </div>
-
         <div class="widget formula">
           <label>Formula</label>
           <textarea name="formula" placeholder="5.5 * self.generation"></textarea>

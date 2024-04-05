@@ -3,7 +3,7 @@ import Simulation from './components/Simulation.vue'
 </script>
 
 <template>
-  <Simulation></Simulation>
+  <Simulation title="Programlet"></Simulation>
 </template>
 
 <style scoped></style>
