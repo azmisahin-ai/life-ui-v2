@@ -1,19 +1,14 @@
 <template>
-
-  <div v-for="(item, index) in messages" :key="index">
-    {{ item.id }}
-    {{ item.parent_id || 0 }}
-    {{ item.lifetime_seconds }}
-    {{ item.elapsed_lifespan }}
-    {{ item.lifecycle }}
-    {{ item.number_of_copies }}
-    {{ item.generation }}
-    {{ item.match_count }}
-    {{ item.fitness }}
+  <div>
+    <!-- Grafik için canvas elementi -->
+    <canvas ref="lineChartCanvas"></canvas>
   </div>
 </template>
 
 <script>
+import { ref, watch, onMounted } from 'vue';
+import { Chart, registerables } from 'chart.js';
+
 export default {
   props: {
     dataList: {
@@ -21,38 +16,60 @@ export default {
       default: () => [],
     },
   },
-  computed: {
-    messages() {
-      return this.dataList || [];
+  mounted() {
+    this.createChart();
+  },
+  watch: {
+    dataList: {
+      handler() {
+        this.redrawChart();
+      },
+      deep: true,
+    },
+  },
+  methods: {
+    createChart() {
+      const lineChartCanvas = this.$refs.lineChartCanvas;
+      const ctx = lineChartCanvas.getContext('2d');
+
+      // Chart.js kurulumu
+      Chart.register(...registerables);
+
+      // Çizgi grafiği oluştur
+      this.lineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: this.dataList.map(item => item.id),
+          datasets: [
+            {
+              label: 'Lifetime Seconds',
+              data: this.dataList.map(item => item.lifetime_seconds),
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 2,
+              fill: false,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    },
+    redrawChart() {
+      if (this.lineChart) {
+        this.lineChart.data.labels = this.dataList.map(item => item.id);
+        this.lineChart.data.datasets[0].data = this.dataList.map(item => item.lifetime_seconds);
+        this.lineChart.update();
+      }
     },
   },
 };
 </script>
 
 <style scoped>
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-th {
-  background-color: #f2f2f2;
-}
-
-.even {
-  background-color: #f9f9f9;
-  /* Çift satırlar için arka plan rengi */
-}
-
-.odd {
-  background-color: #ffffff;
-  /* Tek satırlar için arka plan rengi */
-}
+/* İsteğe bağlı stil tanımları */
 </style>
