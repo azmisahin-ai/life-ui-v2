@@ -64,16 +64,25 @@ const addApplcationLogData = (data) => {
 
 const addInstanceStatusData = (data) => {
   // instanceStatusList içinde data.id'ye sahip öğeyi bul
-  const existingItem = instanceStatusList.value.find(item => item.id === data.id);
+  const existingItemIndex = instanceStatusList.value.findIndex(item => item.id === data.id);
 
-  if (existingItem) {
-    // Eğer data.id'ye sahip öğe varsa, bu öğeyi güncelle
-    Object.assign(existingItem, data);
+  if (existingItemIndex !== -1) {
+    // Eğer data.id'ye sahip öğe varsa, bu öğenin life_status değerini kontrol et
+    if (data.life_status === 'Stopped') {
+      // Eğer life_status değeri "Stopped" ise, öğeyi listeden kaldır
+      instanceStatusList.value.splice(existingItemIndex, 1);
+    } else {
+      // Eğer life_status değeri "Stopped" değilse, öğeyi güncelle
+      Object.assign(instanceStatusList.value[existingItemIndex], data);
+    }
   } else {
-    // Eğer data.id'ye sahip öğe yoksa, yeni öğeyi ekle
-    instanceStatusList.value.push(data);
+    // Eğer data.id'ye sahip öğe yoksa ve life_status değeri "Stopped" değilse, yeni öğeyi ekle
+    if (data.life_status !== 'Stopped') {
+      instanceStatusList.value.push(data);
+    }
   }
 };
+
 
 const scrollConsoleToBottom = () => {
   if (consoleOverlayRef.value) {
