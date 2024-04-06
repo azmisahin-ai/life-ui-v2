@@ -1,6 +1,6 @@
 <template>
   <div class="tree">
-
+    {{ appearance }}
 
   </div>
 </template>
@@ -9,6 +9,10 @@
 export default {
   name: 'AppearanceTree',
   props: {
+    appearance: {
+      type: String,
+      default: () => "DirectoryTree"
+    },
     dataList: {
       type: Array,
       default: () => [],
