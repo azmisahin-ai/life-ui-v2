@@ -15,22 +15,22 @@ export default {
   data() {
     return {
       p5Instance: null,
-      nodes: [],
+      particles: [],
     };
   },
   mounted() {
-    this.createBrainstorm();
+    this.createParticleAnimation();
   },
   watch: {
     dataList: {
       handler() {
-        this.redrawBrainstorm();
+        this.updateParticles();
       },
       deep: true,
     },
   },
   methods: {
-    createBrainstorm() {
+    createParticleAnimation() {
       const self = this;
       this.p5Instance = new p5((p) => {
         p.setup = () => {
@@ -38,82 +38,52 @@ export default {
           const canvasWidth = canvasContainer.clientWidth;
           const canvasHeight = canvasContainer.clientHeight;
           p.createCanvas(canvasWidth, canvasHeight).parent(canvasContainer);
-          p.noLoop(); // p5.js draw() döngüsünü devre dışı bırak
-
-          self.createNodes(p); // Düğümleri oluştur
-          self.drawBrainstorm(p); // Brainstorm'u çiz
         };
 
-        // p.mouseClicked = () => {
-        //   self.checkClick(p);
-        // };
+        p.draw = () => {
+          p.background(255);
+          self.updateParticles();
+          self.drawParticles();
+        };
       });
     },
 
-    createNodes(p) {
-      const margin = 40;
-      this.nodes = [];
-      this.dataList.forEach((node, index) => {
-        const x = margin + (index % 10) * 100;
-        const y = margin + Math.floor(index / 10) * 100;
-        const diameter = node.lifetime_seconds; // Düğümün büyüklüğü lifetime_seconds'a bağlı
-        const color = this.getColor(node.id);
+    updateParticles() {
+      this.particles = [];
+      this.dataList.forEach((data) => {
+        const scaledPosition = this.scalePosition(data.position);
+        const scaledVelocity = this.scaleVelocity(data.velocity);
 
-        this.nodes.push({ id: node.id, x, y, diameter, color, data: node });
+        this.particles.push({
+          x: scaledPosition.x,
+          y: scaledPosition.y,
+          velocityX: scaledVelocity.x,
+          velocityY: scaledVelocity.y,
+          diameter: 20,
+          color: this.getColor(data.id),
+        });
       });
     },
 
-    drawBrainstorm(p) {
+    drawParticles() {
+      const p = this.p5Instance;
+      this.particles.forEach((particle) => {
+        p.fill(particle.color);
+        p.noStroke();
+        p.ellipse(particle.x, particle.y, particle.diameter, particle.diameter);
 
-      p.textAlign(p.CENTER, p.CENTER);
-      p.textSize(16);
+        // Parçacıkları hareket ettir
+        particle.x += particle.velocityX;
+        particle.y += particle.velocityY;
 
-      // Düğümleri çiz
-      this.nodes.forEach((node) => {
-        p.fill(node.color);
-        p.stroke(node.color);
-        p.ellipse(node.x, node.y, node.diameter, node.diameter);
-        p.fill(0);
-        p.text(node.id, node.x, node.y);
-
-        // Parent bağlantılarını çiz
-        const parent_id = node.data.parent_id;
-        if (parent_id) {
-          const parentNode = this.nodes.find((n) => n.id === parent_id);
-          if (parentNode) {
-            // Parent düğümün merkez koordinatları
-            const parentX = parentNode.x;
-            const parentY = parentNode.y;
-
-            // Düğümün merkez koordinatları
-            const nodeX = node.x;
-            const nodeY = node.y;
-
-            // Çizgiyi çiz
-            p.noFill();
-            p.stroke(parentNode.color);
-            p.strokeWeight(2);
-
-            // Eğriyi çizmek için yön belirle
-            const curveFactor = 0.5; // Eğri faktörü (0 ile 1 arasında)
-            const curveX1 = nodeX + (parentX - nodeX) * curveFactor;
-            const curveY1 = nodeY + (parentY - nodeY) * curveFactor;
-            const curveX2 = parentX - (parentX - nodeX) * curveFactor;
-            const curveY2 = parentY - (parentY - nodeY) * curveFactor;
-
-            // Eğriyi çiz
-            p.curve(curveX1, curveY1, nodeX, nodeY, parentX, parentY, curveX2, curveY2);
-          }
+        // Kenarlardan sekme kontrolü
+        if (particle.x < 0 || particle.x > p.width) {
+          particle.velocityX *= -1;
+        }
+        if (particle.y < 0 || particle.y > p.height) {
+          particle.velocityY *= -1;
         }
       });
-    },
-
-
-    redrawBrainstorm() {
-      if (this.p5Instance) {
-        this.p5Instance.remove();
-        this.createBrainstorm();
-      }
     },
 
     getColor(id) {
@@ -127,34 +97,25 @@ export default {
       return color; // Geçerli renk değerini döndür
     },
 
-
-
-    checkClick(p) {
-      this.nodes.forEach((node) => {
-        const distance = p.dist(p.mouseX, p.mouseY, node.x, node.y);
-        if (distance < node.diameter / 2) {
-          this.showNodeInfo(node);
-        }
-      });
+    scalePosition(position) {
+      // Veri konumunu uygun şekilde ölçeklendir
+      return {
+        x: this.mapValue(position.x, -1e27, 1e27, 0, this.p5Instance.width),
+        y: this.mapValue(position.y, -1e27, 1e27, 0, this.p5Instance.height),
+      };
     },
 
-    showNodeInfo(node) {
-      const info = `
-        ID: ${node.id}
-        Parent ID: ${node.data.parent_id}
-        Lifetime Seconds: ${node.data.lifetime_seconds}
-        Life Created Time: ${node.data.life_created_time}
-        Life Start Time: ${node.data.life_start_time}
-        Elapsed Lifespan: ${node.data.elapsed_lifespan}
-        Lifecycle: ${node.data.lifecycle}
-        Life Status: ${node.data.life_status}
-        Codes: ${node.data.codes.join(', ')}
-        Number of Copies: ${node.data.number_of_copies}
-        Generation: ${node.data.generation}
-        Match Count: ${node.data.match_count}
-        Fitness: ${node.data.fitness}
-      `;
-      alert(info);
+    scaleVelocity(velocity) {
+      // Veri hızını uygun şekilde ölçeklendir
+      return {
+        x: this.mapValue(velocity.x, -1e27, 1e27, -10, 10),
+        y: this.mapValue(velocity.y, -1e27, 1e27, -10, 10),
+      };
+    },
+
+    mapValue(value, minInput, maxInput, minOutput, maxOutput) {
+      // Değerleri aralıklar arasında dönüştür
+      return ((value - minInput) * (maxOutput - minOutput)) / (maxInput - minInput) + minOutput;
     },
   },
 };
