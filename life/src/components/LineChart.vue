@@ -23,6 +23,10 @@ export default {
       type: String,
       default: 'rgba(75, 192, 192, 1)',
     },
+    valueKey: {
+      type: String,
+      required: true,
+    },
   },
   mounted() {
     this.createChart();
@@ -44,8 +48,8 @@ export default {
       Chart.register(...registerables);
 
       // Veri hazırlığı
-      const labels = this.dataList.map(item => item.id);
-      const data = this.dataList.map(item => item.lifetime_seconds);
+      const labels = this.dataList.map(item => `Id: ${item.id}`); // Id'leri etiketlere ekliyoruz
+      const data = this.dataList.map(item => item[this.valueKey]); // Verileri çekiyoruz (valueKey'e göre)
 
       // Çizgi grafiği oluştur
       this.lineChart = new Chart(ctx, {
@@ -73,8 +77,8 @@ export default {
     },
     redrawChart() {
       if (this.lineChart) {
-        const labels = this.dataList.map(item => item.id);
-        const data = this.dataList.map(item => item.lifetime_seconds);
+        const labels = this.dataList.map(item => `Id: ${item.id}`);
+        const data = this.dataList.map(item => item[this.valueKey]);
 
         this.lineChart.data.labels = labels;
         this.lineChart.data.datasets[0].data = data;

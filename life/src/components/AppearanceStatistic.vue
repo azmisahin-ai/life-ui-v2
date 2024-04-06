@@ -1,13 +1,13 @@
 <template>
   <div>
-    <!-- İlk çizgi grafiği -->
+    <!-- İlk çizgi grafiği için LineChart bileşeni -->
     <div class="chart-container">
-      <LineChart :dataList="dataList" chartTitle="Lifetime" lineColor="rgba(75, 192, 192, 1)" />
+      <LineChart :dataList="dataList" valueKey="lifetime_seconds" chartTitle="Lifetime" lineColor="rgba(75, 192, 192, 1)" />
     </div>
 
-    <!-- İkinci çizgi grafiği -->
+    <!-- İkinci çizgi grafiği için LineChart bileşeni -->
     <div class="chart-container">
-      <LineChart :dataList="dataList" chartTitle="Lifespan" lineColor="rgba(255, 99, 132, 1)" />
+      <LineChart :dataList="dataList" valueKey="elapsed_lifespan" chartTitle="Lifespan" lineColor="rgba(255, 99, 132, 1)" />
     </div>
   </div>
 </template>
