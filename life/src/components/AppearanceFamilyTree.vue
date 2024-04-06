@@ -68,26 +68,38 @@ export default {
       p.textAlign(p.CENTER, p.CENTER);
       p.textSize(16);
 
+      // Düğümleri çiz
       this.nodes.forEach((node) => {
         p.fill(node.color);
         p.stroke(node.color);
         p.ellipse(node.x, node.y, node.diameter, node.diameter);
         p.fill(0);
         p.text(node.id, node.x, node.y);
-      });
 
-      p.stroke(0);
-      p.strokeWeight(2);
-      this.nodes.forEach((node) => {
+        // Parent bağlantılarını çiz
         const parent_id = node.data.parent_id;
         if (parent_id) {
           const parentNode = this.nodes.find((n) => n.id === parent_id);
           if (parentNode) {
-            p.line(parentNode.x, parentNode.y, node.x, node.y);
+            // Başlangıç ve bitiş noktalarını belirle
+            const startX = node.x;
+            const startY = node.y;
+            const endX = parentNode.x;
+            const endY = parentNode.y;
+
+            // Eğri çizgisini çiz
+            p.noFill();
+            p.stroke(parentNode.color);
+            p.strokeWeight(2);
+            p.curve(startX, startY, startX, endY, endX, endY, endX, startY);
           }
         }
       });
     },
+
+
+
+
 
     redrawBrainstorm() {
       if (this.p5Instance) {
@@ -97,9 +109,16 @@ export default {
     },
 
     getColor(id) {
+      if (!this.p5Instance) {
+        return '#000000'; // Varsayılan bir renk döndür
+      }
+
       const hue = (id * 137) % 360;
-      return this.p5Instance.color(`hsl(${hue}, 70%, 70%)`);
+      const color = this.p5Instance.color(`hsl(${hue}, 70%, 70%)`);
+
+      return color; // Geçerli renk değerini döndür
     },
+
 
 
     checkClick(p) {

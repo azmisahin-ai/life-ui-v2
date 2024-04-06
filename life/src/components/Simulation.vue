@@ -19,12 +19,12 @@ const programAddress = ref('');
 const socket = ref(null);
 const isConnected = ref(false);
 
-const numberOfInstances = ref(10);
+const numberOfInstances = ref(20);
 const lifetimeSeconds = ref(10);
-const lifecycle = ref(1);
-const numberOfReplicas = ref(3);
+const lifecycle = ref(60/100);
+const numberOfReplicas = ref(10);
 const numberOfGeneration = ref(5);
-const maxMatchLimit = ref(4);
+const maxMatchLimit = ref(5);
 
 const consoleOverlayRef = ref(null);
 
