@@ -14,14 +14,13 @@ import SamplerStatusWidget from './SamplerStatusWidget.vue';
 import InstanceStatusWidget from './InstanceStatusWidget.vue';
 import AppearanceTree from './AppearanceTree.vue';
 
-
 const programAddress = ref('');
 const socket = ref(null);
 const isConnected = ref(false);
 
 const numberOfInstances = ref(20);
 const lifetimeSeconds = ref(10);
-const lifecycle = ref(60/100);
+const lifecycle = ref(60 / 100);
 const numberOfReplicas = ref(10);
 const numberOfGeneration = ref(5);
 const maxMatchLimit = ref(5);
@@ -331,6 +330,10 @@ const changeAppearance = (event) => {
     case 'FamilyTree':
       appearance.value = "FamilyTree";
       break;
+    case 'AppearanceStatistic':
+      appearance.value = "AppearanceStatistic";
+      break;
+
     default:
       appearance.value = "DirectoryTree";
       break;
@@ -435,7 +438,8 @@ watchEffect(() => {
 
             <option value="DirectoryTree">Directory Tree</option>
             <option value="FamilyTree">Family Tree</option>
-
+            <option value="AppearanceStatistic">Statistic</option>
+            
           </select>
         </div>
 
