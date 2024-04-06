@@ -50,7 +50,7 @@ export default {
           match_count: 0,
           fitness: 9.453034597765814
         }
-        
+
         ctx.fillStyle = 'green';
         ctx.beginPath();
         ctx.arc(50 + index * 50, 50, data.id * 5, 0, Math.PI * 2);

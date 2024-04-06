@@ -336,7 +336,7 @@ export default {
       consoleOverlayRef,
       isStartDisabled,
       isStopDisabled,
-
+      simulationDataList
     };
   },
 
@@ -350,20 +350,21 @@ export default {
 
       <div class="appearance-container">
         <div v-if="appearance === 'Simulation'">
-          <AppearanceSimulation class="canvas" title="Simulation">
+          <AppearanceSimulation class="canvas" title="Simulation" :datalist="simulationDataList">
           </AppearanceSimulation>
 
 
         </div>
         <div v-else-if="appearance === 'DirectoryTree'">
 
-          <AppearanceDirectoryTree class="canvas" title="DirectoryTree">
+          <AppearanceDirectoryTree class="canvas" title="DirectoryTree" :dataList="simulationDataList">
+
           </AppearanceDirectoryTree>
 
         </div>
         <div v-else-if="appearance === 'FamilyTree'">
 
-          <AppearanceFamilyTree class="canvas" title="FamilyTree">
+          <AppearanceFamilyTree class="canvas" title="FamilyTree" :dataList="simulationDataList">
           </AppearanceFamilyTree>
         </div>
       </div>
