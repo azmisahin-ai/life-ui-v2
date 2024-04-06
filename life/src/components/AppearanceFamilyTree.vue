@@ -1,14 +1,12 @@
 <template>
-  <div>
-
-    <div v-for="(item, index) in messages" :key="index">
-      {{ item.id }}
-      {{ item.parent_id || 0 }}
-    </div>
-  </div>
+  <svg width="800" height="600">
+    <TreeNode v-for="rootNode in rootNodes" :key="rootNode.id" :node="rootNode" :dataList="dataList" :x="400" :y="50" />
+  </svg>
 </template>
 
 <script>
+import TreeNode from "./TreeNode.vue";
+
 export default {
   props: {
     dataList: {
@@ -17,9 +15,13 @@ export default {
     },
   },
   computed: {
-    messages() {
-      return this.dataList || [];
+    rootNodes() {
+      // Kök düğümleri filtrele
+      return this.dataList.filter(item => !item.parent_id);
     },
+  },
+  components: {
+    TreeNode,
   },
 };
 </script>
