@@ -44,7 +44,7 @@ const userFormula = ref('');
 const evaluatedFormula = ref('');
 const formulaError = ref(null);
 
-const appearance = ref('');
+const appearance = ref('DirectoryTree');
 
 const MAX_DATA_LENGTH = 100;
 
@@ -332,7 +332,7 @@ const changeAppearance = (event) => {
       appearance.value = "FamilyTree";
       break;
     default:
-      appearance.value = "Simulation";
+      appearance.value = "DirectoryTree";
       break;
   }
 };
