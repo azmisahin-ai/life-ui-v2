@@ -19,7 +19,7 @@ const numberOfGeneration = ref(1);
 const maxMatchLimit = ref(1);
 
 
-const consoleData = ref([]);
+const applcationLogList = ref([]);
 const consoleOverlayRef = ref(null);
 
 const simulationStatus = ref({});
@@ -40,14 +40,14 @@ const appearance = ref('Simulation');
 
 const MAX_DATA_LENGTH = 100;
 
-const addDataToConsole = (data) => {
+const addApplcationLogData = (data) => {
   // Veriyi diziye ekle
-  consoleData.value.push(data);
+  applcationLogList.value.push(data);
 
   // Dizinin uzunluğunu kontrol et
-  if (consoleData.value.length > MAX_DATA_LENGTH) {
+  if (applcationLogList.value.length > MAX_DATA_LENGTH) {
     // Diziye eklenen ilk kaydı kaldır
-    consoleData.value.shift(); // Dizinin başından bir elemanı kaldırır
+    applcationLogList.value.shift(); // Dizinin başından bir elemanı kaldırır
   }
 
   // Scroll işlemi
@@ -91,7 +91,7 @@ const connectSocket = () => {
       });
 
       socket.value.on('application_log', (data) => {
-        addDataToConsole(data);
+        addApplcationLogData(data);
       });
     });
 
@@ -341,11 +341,11 @@ export default {
   },
   setup() {
     return {
-      consoleData,
-      consoleOverlayRef,
+      applcationLogList,
+      instanceStatusList,
       isStartDisabled,
       isStopDisabled,
-      instanceStatusList
+      consoleOverlayRef,
     };
   },
 
@@ -379,7 +379,7 @@ export default {
       </div>
 
       <div class="console-overlay" ref="consoleOverlay">
-        <ConsoleWidget class="console" :title="'Console'" :dataList="consoleData" />
+        <ConsoleWidget class="console" :title="'Console'" :dataList="applcationLogList" />
       </div>
 
 
