@@ -7,6 +7,10 @@ const { title } = defineProps({
   title: String,
 });
 
+const programAddress = ref('');
+const socket = ref(null);
+const isConnected = ref(false);
+
 const numberOfInstances = ref(1);
 const lifetimeSeconds = ref(0.1);
 const lifecycle = ref(0.1);
@@ -14,17 +18,25 @@ const numberOfReplicas = ref(1);
 const numberOfGeneration = ref(1);
 const maxMatchLimit = ref(1);
 
-const programAddress = ref('');
-const socket = ref(null);
-const isConnected = ref(false);
+const MAX_CONSOLE_DATA_LENGTH = 100;
 const consoleData = ref([]);
+const consoleOverlayRef = ref(null);
+
 const simulationStatus = ref({});
 const samplerStatus = ref({});
 const instanceStatus = ref({});
+const simulationDataList = ref([])
 
-const consoleOverlayRef = ref(null);
+const isStartDisabled = ref(true);
+const isPauseDisabled = ref(true);
+const isResumeDisabled = ref(true);
+const isStopDisabled = ref(true);
 
-const MAX_CONSOLE_DATA_LENGTH = 100;
+const userFormula = ref('');
+const evaluatedFormula = ref('');
+const formulaError = ref(null);
+
+const appearance = ref('Simulation');
 
 const addDataToConsole = (data) => {
   // Veriyi diziye ekle
@@ -36,9 +48,6 @@ const addDataToConsole = (data) => {
     consoleData.value.shift(); // Dizinin başından bir elemanı kaldırır
   }
 
-  // Dizinin son halini kontrol etmek için konsola yazdırabilirsiniz
-  console.log(consoleData.value);
-
   // Scroll işlemi
   scrollConsoleToBottom();
 };
@@ -48,11 +57,6 @@ const scrollConsoleToBottom = () => {
     consoleOverlayRef.value.scrollTop = consoleOverlayRef.value.scrollHeight;
   }
 };
-
-watchEffect(() => {
-  scrollConsoleToBottom();
-});
-
 
 const connectSocket = () => {
   if (programAddress.value) {
@@ -73,6 +77,8 @@ const connectSocket = () => {
 
       socket.value.on('simulation_instance_status', (data) => {
         instanceStatus.value = data;
+
+        simulationDataList.value.push(data);
       });
 
       socket.value.on('application_log', (data) => {
@@ -135,12 +141,6 @@ const updateValue = (event, variableName) => {
       break;
   }
 };
-
-// Buton etkinlik durumları için ref değerleri
-const isStartDisabled = ref(true);
-const isPauseDisabled = ref(true);
-const isResumeDisabled = ref(true);
-const isStopDisabled = ref(true);
 
 const startSimulation = async () => {
   if (!isConnected.value) {
@@ -241,10 +241,6 @@ const stopSimulation = async () => {
   }
 };
 
-// Define ref value for evaluated formula
-const userFormula = ref('');
-const evaluatedFormula = ref('');
-const formulaError = ref(null);
 const evaluateFormula = (formula) => {
   try {
     const evaluated = vm.run(`return ${formula}`);
@@ -289,11 +285,6 @@ const applyFormula = async () => {
   }
 };
 
-const appearance = ref('Simulation'); // Default appearance is 'Simulation'
-const simulationData = ref({}); // Simulation canvas data
-const directoryTreeData = ref([]); // Directory tree canvas data
-const familyTreeData = ref([]); // Family tree canvas data
-
 const changeAppearance = (event) => {
   // appearance değerini yeni görünüşe göre güncelle
   appearance.value = event.target.value;;
@@ -301,20 +292,54 @@ const changeAppearance = (event) => {
   // appearance değerine göre içeriği güncelle
   switch (appearance.value) {
     case 'Simulation':
-      // loadSimulationData(); // İlgili verileri yükle
-      simulationData.value = {}; // Örnek olarak içeriği temizleme
+
       break;
     case 'DirectoryTree':
-      // loadDirectoryTreeData(); // İlgili verileri yükle
-      directoryTreeData.value = []; // Örnek olarak içeriği temizleme
+
       break;
     case 'FamilyTree':
-      // loadFamilyTreeData(); // İlgili verileri yükle
-      familyTreeData.value = []; // Örnek olarak içeriği temizleme
+
       break;
     default:
       break;
   }
+};
+
+watchEffect(() => {
+  scrollConsoleToBottom();
+});
+</script>
+
+<script>
+import Widget from "./Widget.vue";
+import ConsoleWidget from './ConsoleWidget.vue';
+import SimulationStatusWidget from './SimulationStatusWidget.vue';
+import SamplerStatusWidget from './SamplerStatusWidget.vue';
+import InstanceStatusWidget from './InstanceStatusWidget.vue';
+import AppearanceSimulation from './AppearanceSimulation.vue';
+import AppearanceDirectoryTree from './AppearanceDirectoryTree.vue';
+import AppearanceFamilyTree from './AppearanceFamilyTree.vue';
+export default {
+  components: {
+    Widget,
+    ConsoleWidget,
+    SimulationStatusWidget,
+    SamplerStatusWidget,
+    InstanceStatusWidget,
+    AppearanceSimulation,
+    AppearanceDirectoryTree,
+    AppearanceFamilyTree,
+  },
+  setup() {
+    return {
+      consoleData,
+      consoleOverlayRef,
+      isStartDisabled,
+      isStopDisabled,
+
+    };
+  },
+
 };
 </script>
 
@@ -325,18 +350,26 @@ const changeAppearance = (event) => {
 
       <div class="appearance-container">
         <div v-if="appearance === 'Simulation'">
-          <Widget class="canvas" title="Simulation" :data="simulationData"></Widget>
+          <AppearanceSimulation class="canvas" title="Simulation">
+          </AppearanceSimulation>
+
+
         </div>
         <div v-else-if="appearance === 'DirectoryTree'">
-          <Widget class="canvas" title="Directory Tree" :data="directoryTreeData"></Widget>
+
+          <AppearanceDirectoryTree class="canvas" title="DirectoryTree">
+          </AppearanceDirectoryTree>
+
         </div>
         <div v-else-if="appearance === 'FamilyTree'">
-          <Widget class="canvas" title="Family Tree" :data="familyTreeData"></Widget>
+
+          <AppearanceFamilyTree class="canvas" title="FamilyTree">
+          </AppearanceFamilyTree>
         </div>
       </div>
 
       <div class="console-overlay" ref="consoleOverlay">
-        <ConsoleWidget class="console" :title="'Console'" :data="consoleData" />
+        <ConsoleWidget class="console" :title="'Console'" :dataList="consoleData" />
       </div>
 
 
@@ -463,47 +496,15 @@ const changeAppearance = (event) => {
   </div>
 </template>
 
-<script>
-import Widget from "./Widget.vue";
-import ConsoleWidget from './ConsoleWidget.vue';
-import SimulationStatusWidget from './SimulationStatusWidget.vue';
-import SamplerStatusWidget from './SamplerStatusWidget.vue';
-import InstanceStatusWidget from './InstanceStatusWidget.vue';
-export default {
-  components: {
-    Widget,
-    ConsoleWidget,
-    SimulationStatusWidget,
-    SamplerStatusWidget,
-    InstanceStatusWidget
-  },
-  setup() {
-    return {
-      consoleData: [
-        { type: 'info', message: 'This is an information message' },
-        { type: 'warning', message: 'This is a warning message' }
-        // Add more messages as needed
-      ],
-      consoleOverlayRef,
-      isStartDisabled,
-      isStopDisabled,
-    };
-  },
-};
-</script>
-
 <style>
-/* Reset default margin and padding */
 html,
 body {
   height: 100%;
   margin: 0;
   padding: 0;
   font-size: 16px;
-
 }
 
-/* Main simulation container */
 .simulation {
   display: flex;
   height: 100%;
@@ -518,7 +519,6 @@ body {
   overflow-y: hidden
 }
 
-/* Main panel */
 .main {
   position: relative;
   background-color: #f5f5f5;
@@ -526,8 +526,6 @@ body {
   border-radius: 5px;
   margin-right: 10px;
   flex: 1;
-  /* Main panel takes up remaining space */
-
 }
 
 .appearance-container {
@@ -538,9 +536,7 @@ body {
   justify-content: center;
   align-items: center;
   overflow-y: auto;
-  /* İçeriği kaydırılabilir yap */
   height: 100%;
-  /* Yükseklik ayarı */
 }
 
 .canvas {
@@ -563,7 +559,6 @@ body {
   padding: 10px;
   flex: 0.25;
   overflow: hidden;
-
 }
 
 .information-overlay {
@@ -574,22 +569,17 @@ body {
   background-color: rgba(255, 255, 255, 0.8);
   padding: 10px;
   border-radius: 5px;
-
 }
 
-/* Sidebar panel */
+
 .sidebar {
   flex: 0 0 25%;
-  /* Sidebar takes up 25% of simulation width */
   max-width: 25%;
-  /* Max width to prevent exceeding 25% */
   background-color: #f5f5f5;
   border: 1px solid #ddd;
   border-radius: 5px;
   overflow-y: auto;
-  /* Enable vertical scrolling if needed */
 }
-
 
 .toolbar {
   padding: 10px;
@@ -597,7 +587,6 @@ body {
 
 .widget {
   margin-bottom: 20px;
-
 }
 
 .widget label {
@@ -642,7 +631,6 @@ body {
 
 .widget.socket button.connected {
   background-color: #dc3545;
-  /* Red color when connected */
 }
 
 .error-message {
