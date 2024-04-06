@@ -44,7 +44,7 @@ const userFormula = ref('');
 const evaluatedFormula = ref('');
 const formulaError = ref(null);
 
-const appearance = ref('DirectoryTree');
+const appearance = ref('FamilyTree');
 
 const MAX_DATA_LENGTH = 100;
 
@@ -524,6 +524,7 @@ body {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  width: 100%;
   height: 100%;
 }
 

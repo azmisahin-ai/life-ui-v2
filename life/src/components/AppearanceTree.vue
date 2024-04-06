@@ -1,12 +1,12 @@
 <template>
   <div class="tree">
 
-    <div v-if="appearance === 'DirectoryTree'">
+    <div v-if="appearance === 'DirectoryTree'" class="container">
       <AppearanceDirectoryTree :dataList="messages"></AppearanceDirectoryTree>
     </div>
 
 
-    <div v-else-if="appearance === 'FamilyTree'">
+    <div v-else-if="appearance === 'FamilyTree'" class="container">
       <AppearanceFamilyTree :dataList="messages"></AppearanceFamilyTree>
     </div>
   </div>
@@ -40,4 +40,13 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.tree {
+  width: 100%;
+  height: 100%;
+}
+.container{
+  width: 100%;
+  height: 100%;
+}
+</style>
