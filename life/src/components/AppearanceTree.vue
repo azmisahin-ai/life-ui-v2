@@ -1,13 +1,27 @@
 <template>
   <div class="tree">
-    {{ appearance }}
 
+    <div v-if="appearance === 'DirectoryTree'">
+      <AppearanceDirectoryTree :dataList="messages"></AppearanceDirectoryTree>
+    </div>
+
+
+    <div v-else-if="appearance === 'FamilyTree'">
+      <AppearanceFamilyTree :dataList="messages"></AppearanceFamilyTree>
+    </div>
   </div>
 </template>
 
 <script>
+
+import AppearanceDirectoryTree from './AppearanceDirectoryTree.vue';
+import AppearanceFamilyTree from './AppearanceFamilyTree.vue';
+
 export default {
-  name: 'AppearanceTree',
+
+  components: {
+    AppearanceDirectoryTree, AppearanceFamilyTree
+  },
   props: {
     appearance: {
       type: String,
@@ -26,10 +40,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.tree {
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 5px;
-}
-</style>
+<style scoped></style>

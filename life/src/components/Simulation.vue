@@ -13,9 +13,6 @@ import SimulationStatusWidget from './SimulationStatusWidget.vue';
 import SamplerStatusWidget from './SamplerStatusWidget.vue';
 import InstanceStatusWidget from './InstanceStatusWidget.vue';
 import AppearanceTree from './AppearanceTree.vue';
-import AppearanceSimulationTree from './AppearanceSimulationTree.vue';
-import AppearanceDirectoryTree from './AppearanceDirectoryTree.vue';
-import AppearanceFamilyTree from './AppearanceFamilyTree.vue';
 
 
 const programAddress = ref('');
@@ -47,7 +44,7 @@ const userFormula = ref('');
 const evaluatedFormula = ref('');
 const formulaError = ref(null);
 
-const appearance = ref('SimulationTree');
+const appearance = ref('');
 
 const MAX_DATA_LENGTH = 100;
 
@@ -332,8 +329,6 @@ watchEffect(() => {
 
 </script>
 
-
-
 <template>
   <div class="simulation">
     <!-- Main panel -->
@@ -341,32 +336,14 @@ watchEffect(() => {
 
       <div class="appearance-container">
 
-        <AppearanceTree class="canvas" title="AppearanceTree" :dataList="instanceStatusList">
+        <AppearanceTree class="canvas" title="AppearanceTree" :appearance="appearance" :dataList="instanceStatusList">
         </AppearanceTree>
 
-        <!-- <div v-if="appearance === 'SimulationTree'">
-          <AppearanceSimulationTree class="canvas" title="SimulationTree" :datalist="instanceStatusList">
-          </AppearanceSimulationTree>
-
-
-        </div>
-        <div v-else-if="appearance === 'DirectoryTree'">
-
-          <AppearanceDirectoryTree class="canvas" title="DirectoryTree" :dataList="instanceStatusList">
-          </AppearanceDirectoryTree>
-
-        </div>
-        <div v-else-if="appearance === 'FamilyTree'">
-
-          <AppearanceFamilyTree class="canvas" title="FamilyTree" :dataList="instanceStatusList"></AppearanceFamilyTree>
-
-        </div> -->
       </div>
 
       <div class="console-overlay" ref="consoleOverlay">
         <ConsoleWidget class="console" :title="'Console'" :dataList="applcationLogList"></ConsoleWidget>
       </div>
-
 
     </div>
     <div class="widget-container">
@@ -444,7 +421,7 @@ watchEffect(() => {
 
             <option value="DirectoryTree">Directory Tree</option>
             <option value="FamilyTree">Family Tree</option>
-            <option value="SimulationTree">Simulation</option>
+
           </select>
         </div>
 
