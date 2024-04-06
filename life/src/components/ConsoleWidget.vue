@@ -14,11 +14,14 @@
 export default {
   props: {
     title: String,
-    data: Array // Assuming data is an array of message objects
+    dataList: {
+      type: Array,
+      default: () => [],
+    },
   },
   computed: {
     messages() {
-      return this.data || [];
+      return this.dataList || [];
     },
     messagesWithTimestamp() {
       // Add timestamp to each message
