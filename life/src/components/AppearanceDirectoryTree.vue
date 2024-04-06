@@ -3,7 +3,7 @@
     DirectoryTree
     <canvas ref="canvasTree"></canvas>
     <div v-for="(item, index) in messages">
-      {{ item.parentId || 0 }} - {{ item.id }} 
+      {{ item.parentId || 0 }} - {{ item.id }} - {{ item.elapsed_lifespan }} 
     </div>
   </div>
 </template>

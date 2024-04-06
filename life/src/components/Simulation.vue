@@ -63,12 +63,17 @@ const addApplcationLogData = (data) => {
 };
 
 const addInstanceStatusData = (data) => {
-  instanceStatusList.value.push(data);
-  if (instanceStatusList.value.length > MAX_DATA_LENGTH) {
-    // Diziye eklenen ilk kaydı kaldır
-    instanceStatusList.value.shift(); // Dizinin başından bir elemanı kaldırır
+  // instanceStatusList içinde data.id'ye sahip öğeyi bul
+  const existingItem = instanceStatusList.value.find(item => item.id === data.id);
+
+  if (existingItem) {
+    // Eğer data.id'ye sahip öğe varsa, bu öğeyi güncelle
+    Object.assign(existingItem, data);
+  } else {
+    // Eğer data.id'ye sahip öğe yoksa, yeni öğeyi ekle
+    instanceStatusList.value.push(data);
   }
-}
+};
 
 const scrollConsoleToBottom = () => {
   if (consoleOverlayRef.value) {
