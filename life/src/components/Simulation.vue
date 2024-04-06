@@ -356,7 +356,7 @@ const changeAppearance = (event) => {
         :lifeStartTime="instanceStatus.life_start_time" :elapsedLifespan="instanceStatus.elapsed_lifespan"
         :lifecycle="instanceStatus.lifecycle" :lifeStatus="instanceStatus.life_status"
         :numberOfCopies="instanceStatus.number_of_copies" :generation="instanceStatus.generation"
-        :matchCount="instanceStatus.match_count" :fitness="instanceStatus.fitness" />
+        :matchCount="instanceStatus.match_count" :fitness="instanceStatus.fitness" :codes="instanceStatus.codes" />
 
     </div>
     <!-- Sidebar panel -->
@@ -597,6 +597,7 @@ body {
 
 .widget {
   margin-bottom: 20px;
+
 }
 
 .widget label {

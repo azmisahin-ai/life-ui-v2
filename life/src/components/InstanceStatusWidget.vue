@@ -48,6 +48,10 @@
             <p>Fitness: </p>
             <b>{{ fitness }}</b>
         </div>
+        <div class="status-item">
+            <p>Codes: </p>
+            <b>{{ codes }}</b>
+        </div>
     </div>
 </template>
 
@@ -66,7 +70,8 @@ export default {
         numberOfCopies: Number,
         generation: Number,
         matchCount: Number,
-        fitness: Number
+        fitness: Number,
+        codes:Array
     },
     methods: {
         formattedTime(timestamp) {
@@ -103,6 +108,7 @@ h3 {
     padding: 10px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+   
 }
 
 .widget-container h3 {
