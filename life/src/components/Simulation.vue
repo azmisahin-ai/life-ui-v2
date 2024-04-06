@@ -18,13 +18,13 @@ const numberOfReplicas = ref(1);
 const numberOfGeneration = ref(1);
 const maxMatchLimit = ref(1);
 
-
-const applcationLogList = ref([]);
 const consoleOverlayRef = ref(null);
 
 const simulationStatus = ref({});
 const samplerStatus = ref({});
 const instanceStatus = ref({});
+
+const applcationLogList = ref([]);
 const instanceStatusList = ref([])
 
 const isStartDisabled = ref(true);
@@ -367,39 +367,39 @@ export default {
         <div v-else-if="appearance === 'DirectoryTree'">
 
           <AppearanceDirectoryTree class="canvas" title="DirectoryTree" :dataList="instanceStatusList">
-
           </AppearanceDirectoryTree>
 
         </div>
         <div v-else-if="appearance === 'FamilyTree'">
 
-          <AppearanceFamilyTree class="canvas" title="FamilyTree" :dataList="instanceStatusList">
-          </AppearanceFamilyTree>
+          <AppearanceFamilyTree class="canvas" title="FamilyTree" :dataList="instanceStatusList"></AppearanceFamilyTree>
+         
         </div>
       </div>
 
       <div class="console-overlay" ref="consoleOverlay">
-        <ConsoleWidget class="console" :title="'Console'" :dataList="applcationLogList" />
+        <ConsoleWidget class="console" :title="'Console'" :dataList="applcationLogList" ></ConsoleWidget>
       </div>
 
 
     </div>
     <div class="widget-container">
       <SimulationStatusWidget class="widget" :simulationType="simulationStatus.simulation_type"
-        :simulationStatus="simulationStatus.simulation_status" />
+        :simulationStatus="simulationStatus.simulation_status"></SimulationStatusWidget>
 
       <SamplerStatusWidget class="widget" :name="samplerStatus.name"
         :numberOfInstances="samplerStatus.number_of_instance" :lifetimeSeconds="samplerStatus.lifetime_seconds"
         :lifecycle="samplerStatus.lifecycle" :numberOfInstancesCreated="samplerStatus.number_of_instance_created"
         :numberOfInstancesMatched="samplerStatus.number_of_instance_matched"
-        :numberOfInstancesReplicated="samplerStatus.number_of_instance_replicated" />
+        :numberOfInstancesReplicated="samplerStatus.number_of_instance_replicated"></SamplerStatusWidget>
 
       <InstanceStatusWidget class="widget" :id="instanceStatus.id" :parentId="instanceStatus.parent_id"
         :lifetimeSeconds="instanceStatus.lifetime_seconds" :lifeCreatedTime="instanceStatus.life_created_time"
         :lifeStartTime="instanceStatus.life_start_time" :elapsedLifespan="instanceStatus.elapsed_lifespan"
         :lifecycle="instanceStatus.lifecycle" :lifeStatus="instanceStatus.life_status"
         :numberOfCopies="instanceStatus.number_of_copies" :generation="instanceStatus.generation"
-        :matchCount="instanceStatus.match_count" :fitness="instanceStatus.fitness" :codes="instanceStatus.codes" />
+        :matchCount="instanceStatus.match_count" :fitness="instanceStatus.fitness" :codes="instanceStatus.codes">
+      </InstanceStatusWidget>
 
     </div>
     <!-- Sidebar panel -->
