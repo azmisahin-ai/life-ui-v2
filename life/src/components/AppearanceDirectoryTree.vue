@@ -65,10 +65,12 @@ th {
 }
 
 .even {
-  background-color: #f9f9f9; /* Çift satırlar için arka plan rengi */
+  background-color: #f9f9f9;
+  /* Çift satırlar için arka plan rengi */
 }
 
 .odd {
-  background-color: #ffffff; /* Tek satırlar için arka plan rengi */
+  background-color: #ffffff;
+  /* Tek satırlar için arka plan rengi */
 }
 </style>
