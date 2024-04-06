@@ -18,14 +18,14 @@ const numberOfReplicas = ref(1);
 const numberOfGeneration = ref(1);
 const maxMatchLimit = ref(1);
 
-const MAX_CONSOLE_DATA_LENGTH = 100;
+
 const consoleData = ref([]);
 const consoleOverlayRef = ref(null);
 
 const simulationStatus = ref({});
 const samplerStatus = ref({});
 const instanceStatus = ref({});
-const simulationDataList = ref([])
+const instanceStatusList = ref([])
 
 const isStartDisabled = ref(true);
 const isPauseDisabled = ref(true);
@@ -38,12 +38,14 @@ const formulaError = ref(null);
 
 const appearance = ref('Simulation');
 
+const MAX_DATA_LENGTH = 100;
+
 const addDataToConsole = (data) => {
   // Veriyi diziye ekle
   consoleData.value.push(data);
 
   // Dizinin uzunluğunu kontrol et
-  if (consoleData.value.length > MAX_CONSOLE_DATA_LENGTH) {
+  if (consoleData.value.length > MAX_DATA_LENGTH) {
     // Diziye eklenen ilk kaydı kaldır
     consoleData.value.shift(); // Dizinin başından bir elemanı kaldırır
   }
@@ -51,6 +53,14 @@ const addDataToConsole = (data) => {
   // Scroll işlemi
   scrollConsoleToBottom();
 };
+
+const addInstanceStatusData = (data) => {
+  instanceStatusList.value.push(data);
+  if (instanceStatusList.value.length > MAX_DATA_LENGTH) {
+    // Diziye eklenen ilk kaydı kaldır
+    instanceStatusList.value.shift(); // Dizinin başından bir elemanı kaldırır
+  }
+}
 
 const scrollConsoleToBottom = () => {
   if (consoleOverlayRef.value) {
@@ -77,8 +87,7 @@ const connectSocket = () => {
 
       socket.value.on('simulation_instance_status', (data) => {
         instanceStatus.value = data;
-
-        simulationDataList.value.push(data);
+        addInstanceStatusData(data);
       });
 
       socket.value.on('application_log', (data) => {
@@ -350,21 +359,21 @@ export default {
 
       <div class="appearance-container">
         <div v-if="appearance === 'Simulation'">
-          <AppearanceSimulation class="canvas" title="Simulation" :datalist="simulationDataList">
+          <AppearanceSimulation class="canvas" title="Simulation" :datalist="instanceStatusList">
           </AppearanceSimulation>
 
 
         </div>
         <div v-else-if="appearance === 'DirectoryTree'">
 
-          <AppearanceDirectoryTree class="canvas" title="DirectoryTree" :dataList="simulationDataList">
+          <AppearanceDirectoryTree class="canvas" title="DirectoryTree" :dataList="instanceStatusList">
 
           </AppearanceDirectoryTree>
 
         </div>
         <div v-else-if="appearance === 'FamilyTree'">
 
-          <AppearanceFamilyTree class="canvas" title="FamilyTree" :dataList="simulationDataList">
+          <AppearanceFamilyTree class="canvas" title="FamilyTree" :dataList="instanceStatusList">
           </AppearanceFamilyTree>
         </div>
       </div>
