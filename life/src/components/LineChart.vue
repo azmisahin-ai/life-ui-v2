@@ -23,6 +23,10 @@ export default {
       type: String,
       default: 'rgba(75, 192, 192, 1)',
     },
+    idKey: {
+      type: String,
+      required: true,
+    },
     valueKey: {
       type: String,
       required: true,
@@ -48,7 +52,7 @@ export default {
       Chart.register(...registerables);
 
       // Veri hazırlığı
-      const labels = this.dataList.map(item => `Id: ${item.id}`); // Id'leri etiketlere ekliyoruz
+      const labels = this.dataList.map(item => item[this.idKey]); // Id'leri etiketlere ekliyoruz
       const data = this.dataList.map(item => item[this.valueKey]); // Verileri çekiyoruz (valueKey'e göre)
 
       // Çizgi grafiği oluştur
@@ -77,7 +81,7 @@ export default {
     },
     redrawChart() {
       if (this.lineChart) {
-        const labels = this.dataList.map(item => `Id: ${item.id}`);
+        const labels = this.dataList.map(item => item[this.idKey]);
         const data = this.dataList.map(item => item[this.valueKey]);
 
         this.lineChart.data.labels = labels;

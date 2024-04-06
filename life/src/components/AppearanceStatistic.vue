@@ -2,18 +2,25 @@
   <div>
 
     <div class="chart-container">
-      <LineChart :dataList="dataList" valueKey="lifetime_seconds" chartTitle="lifetime"
+      <LineChart :dataList="dataList" idKey="id" valueKey="lifetime_seconds" chartTitle="lifetime"
         lineColor="rgba(75, 192, 192, 1)" />
     </div>
 
     <div class="chart-container">
-      <LineChart :dataList="dataList" valueKey="elapsed_lifespan" chartTitle="lifespan"
+      <LineChart :dataList="dataList" idKey="id" valueKey="elapsed_lifespan" chartTitle="lifespan"
         lineColor="rgba(255, 99, 132, 1)" />
     </div>
 
     <div class="chart-container">
-      <LineChart :dataList="dataList" valueKey="fitness" chartTitle="fitness" lineColor="rgba(100, 99, 132, 1)" />
+      <LineChart :dataList="dataList" idKey="id" valueKey="match_count" chartTitle="match"
+        lineColor="rgba(150, 99, 132, 1)" />
     </div>
+
+    <div class="chart-container">
+      <LineChart :dataList="dataList" idKey="id" valueKey="fitness" chartTitle="fitness"
+        lineColor="rgba(100, 99, 132, 1)" />
+    </div>
+
   </div>
 </template>
 
