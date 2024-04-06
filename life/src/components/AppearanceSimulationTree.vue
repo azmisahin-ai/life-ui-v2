@@ -2,6 +2,9 @@
   <div class="appearance-simulation-tree">
     <h3>Simulation Tree</h3>
     <canvas ref="simulationTreeCanvas"></canvas>
+    <div v-for="(item, index) in messages">
+      {{ item.id }}
+    </div>
   </div>
 </template>
 
@@ -12,6 +15,11 @@ export default {
     dataList: {
       type: Array,
       default: () => [],
+    },
+  },
+  computed: {
+    messages() {
+      return this.dataList || [];
     },
   },
   mounted() {

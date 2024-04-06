@@ -12,6 +12,7 @@ import ConsoleWidget from './ConsoleWidget.vue';
 import SimulationStatusWidget from './SimulationStatusWidget.vue';
 import SamplerStatusWidget from './SamplerStatusWidget.vue';
 import InstanceStatusWidget from './InstanceStatusWidget.vue';
+import AppearanceTree from './AppearanceTree.vue';
 import AppearanceSimulationTree from './AppearanceSimulationTree.vue';
 import AppearanceDirectoryTree from './AppearanceDirectoryTree.vue';
 import AppearanceFamilyTree from './AppearanceFamilyTree.vue';
@@ -339,7 +340,11 @@ watchEffect(() => {
     <div class="panel main">
 
       <div class="appearance-container">
-        <div v-if="appearance === 'SimulationTree'">
+
+        <AppearanceTree class="canvas" title="AppearanceTree" :dataList="instanceStatusList">
+        </AppearanceTree>
+
+        <!-- <div v-if="appearance === 'SimulationTree'">
           <AppearanceSimulationTree class="canvas" title="SimulationTree" :datalist="instanceStatusList">
           </AppearanceSimulationTree>
 
@@ -355,7 +360,7 @@ watchEffect(() => {
 
           <AppearanceFamilyTree class="canvas" title="FamilyTree" :dataList="instanceStatusList"></AppearanceFamilyTree>
 
-        </div>
+        </div> -->
       </div>
 
       <div class="console-overlay" ref="consoleOverlay">
@@ -436,9 +441,10 @@ watchEffect(() => {
           <label>Appearance</label>
           <select v-model="appearance" name="appearance" @change="changeAppearance"
             title="Change your perspective on simulation.">
-            <option value="SimulationTree">Simulation</option>
+
             <option value="DirectoryTree">Directory Tree</option>
             <option value="FamilyTree">Family Tree</option>
+            <option value="SimulationTree">Simulation</option>
           </select>
         </div>
 
