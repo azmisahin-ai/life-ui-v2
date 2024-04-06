@@ -436,8 +436,8 @@ watchEffect(() => {
           <select v-model="appearance" name="appearance" @change="changeAppearance"
             title="Change your perspective on simulation.">
 
-            <option value="DirectoryTree">Directory Tree</option>
-            <option value="FamilyTree">Family Tree</option>
+            <option value="DirectoryTree">Directory</option>
+            <option value="FamilyTree">Family</option>
             <option value="AppearanceStatistic">Statistic</option>
             
           </select>
