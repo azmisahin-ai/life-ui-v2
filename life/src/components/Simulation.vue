@@ -1,11 +1,22 @@
 <script setup>
-import { ref, watchEffect } from 'vue';
-import io from 'socket.io-client';
-import axios from 'axios';
-
 const { title } = defineProps({
   title: String,
 });
+
+import { ref, watchEffect } from 'vue';
+
+import io from 'socket.io-client';
+import axios from 'axios';
+
+import Widget from "./Widget.vue";
+import ConsoleWidget from './ConsoleWidget.vue';
+import SimulationStatusWidget from './SimulationStatusWidget.vue';
+import SamplerStatusWidget from './SamplerStatusWidget.vue';
+import InstanceStatusWidget from './InstanceStatusWidget.vue';
+import AppearanceSimulation from './AppearanceSimulation.vue';
+import AppearanceDirectoryTree from './AppearanceDirectoryTree.vue';
+import AppearanceFamilyTree from './AppearanceFamilyTree.vue';
+
 
 const programAddress = ref('');
 const socket = ref(null);
@@ -317,40 +328,10 @@ const changeAppearance = (event) => {
 watchEffect(() => {
   scrollConsoleToBottom();
 });
+
 </script>
 
-<script>
-import Widget from "./Widget.vue";
-import ConsoleWidget from './ConsoleWidget.vue';
-import SimulationStatusWidget from './SimulationStatusWidget.vue';
-import SamplerStatusWidget from './SamplerStatusWidget.vue';
-import InstanceStatusWidget from './InstanceStatusWidget.vue';
-import AppearanceSimulation from './AppearanceSimulation.vue';
-import AppearanceDirectoryTree from './AppearanceDirectoryTree.vue';
-import AppearanceFamilyTree from './AppearanceFamilyTree.vue';
-export default {
-  components: {
-    Widget,
-    ConsoleWidget,
-    SimulationStatusWidget,
-    SamplerStatusWidget,
-    InstanceStatusWidget,
-    AppearanceSimulation,
-    AppearanceDirectoryTree,
-    AppearanceFamilyTree,
-  },
-  setup() {
-    return {
-      applcationLogList,
-      instanceStatusList,
-      isStartDisabled,
-      isStopDisabled,
-      consoleOverlayRef,
-    };
-  },
 
-};
-</script>
 
 <template>
   <div class="simulation">
@@ -373,12 +354,12 @@ export default {
         <div v-else-if="appearance === 'FamilyTree'">
 
           <AppearanceFamilyTree class="canvas" title="FamilyTree" :dataList="instanceStatusList"></AppearanceFamilyTree>
-         
+
         </div>
       </div>
 
       <div class="console-overlay" ref="consoleOverlay">
-        <ConsoleWidget class="console" :title="'Console'" :dataList="applcationLogList" ></ConsoleWidget>
+        <ConsoleWidget class="console" :title="'Console'" :dataList="applcationLogList"></ConsoleWidget>
       </div>
 
 
