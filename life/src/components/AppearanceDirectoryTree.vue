@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in messages" :key="index">
+        <tr v-for="(item, index) in messages" :key="index" :class="index % 2 === 0 ? 'even' : 'odd'">
           <td>{{ item.id }}</td>
           <td>{{ item.parent_id || 0 }}</td>
           <td>{{ item.lifetime_seconds }}</td>
@@ -62,5 +62,13 @@ td {
 
 th {
   background-color: #f2f2f2;
+}
+
+.even {
+  background-color: #f9f9f9; /* Çift satırlar için arka plan rengi */
+}
+
+.odd {
+  background-color: #ffffff; /* Tek satırlar için arka plan rengi */
 }
 </style>
