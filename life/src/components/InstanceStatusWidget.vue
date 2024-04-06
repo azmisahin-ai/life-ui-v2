@@ -48,9 +48,14 @@
             <p>Fitness: </p>
             <b>{{ fitness }}</b>
         </div>
+
         <div class="status-item">
-            <p>Codes: </p>
-            <b>{{ codes }}</b>
+            <p>Assembly Codes:</p>
+            <div class="assembly-codes">
+                <div v-for="(assembly, index) in assemblyCodes" :key="index" class="assembly-code">
+                    {{ assembly }}
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -71,47 +76,73 @@ export default {
         generation: Number,
         matchCount: Number,
         fitness: Number,
-        codes:Array
+        codes: Array,
+    },
+    computed: {
+        assemblyCodes() {
+            if (!this.codes || this.codes.length === 0) {
+                return [];
+            }
+            return this.codes.map(code => this.assemblyCodeFromNumber(code));
+        },
     },
     methods: {
         formattedTime(timestamp) {
             const date = new Date(timestamp * 1000);
-            return date.toLocaleString(); // You can customize the date format
-        }
-    }
+            return date.toLocaleString(); // Customize date format as needed
+        },
+        assemblyCodeFromNumber(code) {
+            switch (code) {
+                case 0x00: return "NOP";
+                case 0x01: return "LXI B, 16-bit Data";
+                case 0x02: return "STAX B";
+                case 0x03: return "INX B";
+                case 0x04: return "INR B";
+                case 0x05: return "DCR B";
+                case 0x06: return "MVI B, 8-bit Data";
+                case 0x07: return "RLC";
+                case 0x08: return "NOP";
+                case 0x09: return "DAD B";
+                case 0x0A: return "LDAX B";
+                case 0x0B: return "DCX B";
+                case 0x0C: return "INR C";
+                case 0x0D: return "DCR C";
+                case 0x0E: return "MVI C, 8-bit Data";
+                case 0x0F: return "RRC";
+                case 0x10: return "NOP";
+                case 0x11: return "LXI D, 16-bit Data";
+                case 0x12: return "STAX D";
+                case 0x13: return "INX D";
+                case 0x14: return "INR D";
+                case 0x15: return "DCR D";
+                case 0x16: return "MVI D, 8-bit Data";
+                case 0x17: return "RAL";
+                case 0x18: return "NOP";
+                case 0x19: return "DAD D";
+                case 0x1A: return "LDAX D";
+                case 0x1B: return "DCX D";
+                case 0x1C: return "INR E";
+                case 0x1D: return "DCR E";
+                case 0x1E: return "MVI E, 8-bit Data";
+                case 0x1F: return "RAR";
+                // Add more cases for other opcodes up to 0xFF (255 in decimal)
+                default: return `Opcode ${code}`;
+            }
+        },
+    },
 };
 </script>
 
 <style scoped>
-.instance-status-widget {
+.assembly-widget {
     background-color: #f0f0f0;
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ddd;
     width: 250px;
-    /* Ölçüleri ayarlayabilirsiniz */
 }
 
 h3 {
-    margin-bottom: 10px;
-}
-
-.status-item {
-    margin-bottom: 8px;
-}
-
-/* Özel stiller burada tanımlanır */
-.widget-container {
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-   
-}
-
-.widget-container h3 {
     margin-bottom: 10px;
     color: #007bff;
 }
@@ -120,11 +151,12 @@ h3 {
     margin-bottom: 8px;
 }
 
-.status-label {
-    font-weight: bold;
+.assembly-codes {
+    padding-left: 15px;
 }
 
-.status-value {
-    color: #333;
+.assembly-code {
+    margin-bottom: 5px;
+    font-family: monospace;
 }
 </style>
