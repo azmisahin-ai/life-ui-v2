@@ -1,7 +1,7 @@
 <template>
   <div class="console-widget">
     <h4>{{ title }}</h4>
-    <div class="console-messages" ref="consoleMessages" style="height: 100px; overflow-y: auto;">
+    <div class="console-messages" ref="consoleMessages" style="height: 100px; overflow: hidden;">
       <div v-for="(item, index) in messagesWithTimestamp" :key="index" class="console-message" :class="item.type">
         <span class="message-timestamp">{{ item.timestamp }} - </span>
         {{ item.message }}
@@ -62,7 +62,7 @@ export default {
 
 <style scoped>
 .console-widget {
-  background-color: #424242;
+
   color: white;
   padding: 10px;
   border-radius: 5px;

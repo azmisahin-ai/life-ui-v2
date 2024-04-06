@@ -532,7 +532,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow-y: auto;
+  overflow: hidden;
   height: 100%;
 }
 
@@ -551,7 +551,7 @@ body {
 }
 
 .console-overlay {
-  background-color: #333;
+  background-color: rgba(19, 19, 19, 0.744);
   color: white;
   padding: 10px;
   flex: 0.25;
