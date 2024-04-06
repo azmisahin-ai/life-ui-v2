@@ -1,75 +1,37 @@
 <template>
   <div>
-    <!-- Grafik için canvas elementi -->
-    <canvas ref="lineChartCanvas"></canvas>
+    <!-- İlk çizgi grafiği -->
+    <div class="chart-container">
+      <LineChart :dataList="dataList" chartTitle="Lifetime" lineColor="rgba(75, 192, 192, 1)" />
+    </div>
+
+    <!-- İkinci çizgi grafiği -->
+    <div class="chart-container">
+      <LineChart :dataList="dataList" chartTitle="Lifespan" lineColor="rgba(255, 99, 132, 1)" />
+    </div>
   </div>
 </template>
 
 <script>
-import { ref, watch, onMounted } from 'vue';
-import { Chart, registerables } from 'chart.js';
+import LineChart from './LineChart.vue';
 
 export default {
+  components: {
+    LineChart,
+  },
   props: {
     dataList: {
       type: Array,
       default: () => [],
     },
   },
-  mounted() {
-    this.createChart();
-  },
-  watch: {
-    dataList: {
-      handler() {
-        this.redrawChart();
-      },
-      deep: true,
-    },
-  },
-  methods: {
-    createChart() {
-      const lineChartCanvas = this.$refs.lineChartCanvas;
-      const ctx = lineChartCanvas.getContext('2d');
-
-      // Chart.js kurulumu
-      Chart.register(...registerables);
-
-      // Çizgi grafiği oluştur
-      this.lineChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: this.dataList.map(item => item.id),
-          datasets: [
-            {
-              label: 'Lifetime Seconds',
-              data: this.dataList.map(item => item.lifetime_seconds),
-              borderColor: 'rgba(75, 192, 192, 1)',
-              borderWidth: 2,
-              fill: false,
-            },
-          ],
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-        },
-      });
-    },
-    redrawChart() {
-      if (this.lineChart) {
-        this.lineChart.data.labels = this.dataList.map(item => item.id);
-        this.lineChart.data.datasets[0].data = this.dataList.map(item => item.lifetime_seconds);
-        this.lineChart.update();
-      }
-    },
-  },
 };
 </script>
 
 <style scoped>
-/* İsteğe bağlı stil tanımları */
+.chart-container {
+  display: inline-block;
+  width: 50%;
+  /* İki çizgi grafiği yatay olarak yan yana gelecek şekilde */
+}
 </style>
