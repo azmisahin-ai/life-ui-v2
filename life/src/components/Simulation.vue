@@ -321,9 +321,7 @@ const changeAppearance = (event) => {
 
   // appearance değerine göre içeriği güncelle
   switch (appearance.value) {
-    case 'SimulationTree':
-      appearance.value = "SimulationTree";
-      break;
+
     case 'DirectoryTree':
       appearance.value = "DirectoryTree";
       break;
@@ -333,6 +331,10 @@ const changeAppearance = (event) => {
     case 'AppearanceStatistic':
       appearance.value = "AppearanceStatistic";
       break;
+    case 'AppearanceParticle':
+      appearance.value = "AppearanceParticle";
+      break;
+
 
     default:
       appearance.value = "DirectoryTree";
@@ -439,7 +441,8 @@ watchEffect(() => {
             <option value="DirectoryTree">Directory</option>
             <option value="FamilyTree">Family</option>
             <option value="AppearanceStatistic">Statistic</option>
-            
+            <option value="AppearanceParticle">Particle</option>
+
           </select>
         </div>
 

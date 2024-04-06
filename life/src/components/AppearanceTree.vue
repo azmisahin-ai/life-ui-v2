@@ -14,6 +14,10 @@
       <AppearanceStatistic :dataList="messages"></AppearanceStatistic>
     </div>
 
+    <div v-else-if="appearance === 'AppearanceParticle'" class="container">
+      <AppearanceParticle :dataList="messages"></AppearanceParticle>
+    </div>
+
   </div>
 
 
@@ -24,10 +28,11 @@
 import AppearanceDirectoryTree from './AppearanceDirectoryTree.vue';
 import AppearanceFamilyTree from './AppearanceFamilyTree.vue';
 import AppearanceStatistic from './AppearanceStatistic.vue';
+import AppearanceParticle from './AppearanceParticle.vue';
 export default {
 
   components: {
-    AppearanceDirectoryTree, AppearanceFamilyTree, AppearanceStatistic
+    AppearanceDirectoryTree, AppearanceFamilyTree, AppearanceStatistic, AppearanceParticle
   },
   props: {
     appearance: {
