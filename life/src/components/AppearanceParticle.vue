@@ -61,6 +61,9 @@ export default {
           velocityY: scaledVelocity.y,
           diameter: 20,
           color: this.getColor(data.id),
+          generation: data.generation,
+          matchCount: data.match_count,
+          numberOfCopies: data.number_of_copies,
         });
       });
     },
@@ -71,6 +74,33 @@ export default {
         p.fill(particle.color);
         p.noStroke();
         p.ellipse(particle.x, particle.y, particle.diameter, particle.diameter);
+
+        // Generation yazısı
+        p.fill(0);
+        p.textAlign(p.CENTER, p.CENTER);
+        p.text(particle.generation, particle.x, particle.y);
+
+        // Dış halkalar
+        const outerCircleRadius = particle.diameter * 1.5;
+        const outerCircleSpacing = p.TWO_PI / particle.numberOfCopies;
+        p.stroke(200);
+        p.strokeWeight(1);
+        for (let i = 0; i < particle.numberOfCopies; i++) {
+          const angle = i * outerCircleSpacing;
+          const xOffset = p.cos(angle) * outerCircleRadius;
+          const yOffset = p.sin(angle) * outerCircleRadius;
+          p.line(particle.x, particle.y, particle.x + xOffset, particle.y + yOffset);
+        }
+
+        // Uydular (küçük daireler)
+        const satelliteRadius = particle.diameter * 0.3;
+        const satelliteSpacing = p.TWO_PI / particle.matchCount;
+        for (let i = 0; i < particle.matchCount; i++) {
+          const angle = i * satelliteSpacing;
+          const xOffset = p.cos(angle) * outerCircleRadius;
+          const yOffset = p.sin(angle) * outerCircleRadius;
+          p.ellipse(particle.x + xOffset, particle.y + yOffset, satelliteRadius, satelliteRadius);
+        }
 
         // Parçacıkları hareket ettir
         particle.x += particle.velocityX;
@@ -93,7 +123,6 @@ export default {
 
       const hue = (id * 137) % 360;
       const color = this.p5Instance.color(`hsl(${hue}, 70%, 70%)`);
-
       return color; // Geçerli renk değerini döndür
     },
 

@@ -20,8 +20,8 @@ const isConnected = ref(false);
 
 const numberOfInstances = ref(20);
 const lifetimeSeconds = ref(10);
-const lifecycle = ref(60 / 100);
-const numberOfReplicas = ref(10);
+const lifecycle = ref(0.1);
+const numberOfReplicas = ref(5);
 const numberOfGeneration = ref(5);
 const maxMatchLimit = ref(5);
 
