@@ -185,7 +185,8 @@ const startSimulation = async () => {
 
   try {
     const response = await axios.post(`${programAddress.value}/socket/v1/simulation/start`, {
-      simulation_type: 'Core',
+      // simulation_type: 'Core',
+      simulation_type: 'Particles',
       number_of_instances: numberOfInstances.value,
       lifetime_seconds: lifetimeSeconds.value,
       lifecycle: lifecycle.value,
