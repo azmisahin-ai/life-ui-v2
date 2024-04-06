@@ -12,7 +12,7 @@ import ConsoleWidget from './ConsoleWidget.vue';
 import SimulationStatusWidget from './SimulationStatusWidget.vue';
 import SamplerStatusWidget from './SamplerStatusWidget.vue';
 import InstanceStatusWidget from './InstanceStatusWidget.vue';
-import AppearanceSimulation from './AppearanceSimulation.vue';
+import AppearanceSimulationTree from './AppearanceSimulationTree.vue';
 import AppearanceDirectoryTree from './AppearanceDirectoryTree.vue';
 import AppearanceFamilyTree from './AppearanceFamilyTree.vue';
 
@@ -46,7 +46,7 @@ const userFormula = ref('');
 const evaluatedFormula = ref('');
 const formulaError = ref(null);
 
-const appearance = ref('Simulation');
+const appearance = ref('SimulationTree');
 
 const MAX_DATA_LENGTH = 100;
 
@@ -306,20 +306,21 @@ const applyFormula = async () => {
 
 const changeAppearance = (event) => {
   // appearance değerini yeni görünüşe göre güncelle
-  appearance.value = event.target.value;;
+
 
   // appearance değerine göre içeriği güncelle
   switch (appearance.value) {
-    case 'Simulation':
-
+    case 'SimulationTree':
+      appearance.value = "SimulationTree";
       break;
     case 'DirectoryTree':
-
+      appearance.value = "DirectoryTree";
       break;
     case 'FamilyTree':
-
+      appearance.value = "FamilyTree";
       break;
     default:
+      appearance.value = "Simulation";
       break;
   }
 };
@@ -338,9 +339,9 @@ watchEffect(() => {
     <div class="panel main">
 
       <div class="appearance-container">
-        <div v-if="appearance === 'Simulation'">
-          <AppearanceSimulation class="canvas" title="Simulation" :datalist="instanceStatusList">
-          </AppearanceSimulation>
+        <div v-if="appearance === 'SimulationTree'">
+          <AppearanceSimulationTree class="canvas" title="SimulationTree" :datalist="instanceStatusList">
+          </AppearanceSimulationTree>
 
 
         </div>
@@ -435,7 +436,7 @@ watchEffect(() => {
           <label>Appearance</label>
           <select v-model="appearance" name="appearance" @change="changeAppearance"
             title="Change your perspective on simulation.">
-            <option value="Simulation">Simulation</option>
+            <option value="SimulationTree">Simulation</option>
             <option value="DirectoryTree">Directory Tree</option>
             <option value="FamilyTree">Family Tree</option>
           </select>

@@ -1,6 +1,6 @@
 <template>
   <div class="appearance-directory-tree">
-    <h3>Directory Tree Data</h3>
+    <h3>Directory Tree</h3>
     <canvas ref="directoryTreeCanvas"></canvas>
   </div>
 </template>

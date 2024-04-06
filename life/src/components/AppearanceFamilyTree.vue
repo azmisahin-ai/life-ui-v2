@@ -1,6 +1,6 @@
 <template>
   <div class="appearance-family-tree">
-    <h3>Family Tree Data</h3>
+    <h3>Family Tree</h3>
     <canvas ref="familyTreeCanvas"></canvas>
   </div>
 </template>
