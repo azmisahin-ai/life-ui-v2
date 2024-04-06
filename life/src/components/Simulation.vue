@@ -8,7 +8,6 @@ import { ref, watchEffect } from 'vue';
 import io from 'socket.io-client';
 import axios from 'axios';
 
-import Widget from "./Widget.vue";
 import ConsoleWidget from './ConsoleWidget.vue';
 import SimulationStatusWidget from './SimulationStatusWidget.vue';
 import SamplerStatusWidget from './SamplerStatusWidget.vue';
