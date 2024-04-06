@@ -15,70 +15,33 @@ export default {
   data() {
     return {
       p5Instance: null,
+      nodes: [], // Düğümleri tutmak için dizi
     };
   },
   mounted() {
-    this.createFamilyTree();
+    this.createBrainstorm();
   },
   watch: {
     dataList: {
       handler() {
-        this.redrawFamilyTree();
+        this.redrawBrainstorm();
       },
       deep: true,
     },
   },
   methods: {
-    createFamilyTree() {
+    createBrainstorm() {
       const sketch = (p) => {
-        let nodeCoordinates = {}; // nodeCoordinates'i setup içinde tanımla
-
         p.setup = () => {
           const canvasContainer = this.$refs.canvasContainer;
           const canvasWidth = canvasContainer.clientWidth;
           const canvasHeight = canvasContainer.clientHeight;
           const canvas = p.createCanvas(canvasWidth, canvasHeight);
           canvas.parent(canvasContainer);
-
-          console.log("canvasWidth", canvasWidth)
-          console.log("canvasHeight", canvasHeight)
           p.noLoop(); // p5.js draw() döngüsünü devre dışı bırak
 
-          this.determineNodeCoordinates(p, nodeCoordinates); // nodeCoordinates'i determineNodeCoordinates'e geçir
-          this.drawTree(p, nodeCoordinates); // nodeCoordinates'i drawTree'ye geçir
-        };
-
-        this.determineNodeCoordinates = (p, nodeCoordinates) => {
-          this.dataList.forEach(node => {
-            const x = p.random(p.width);
-            const y = p.random(p.height);
-            nodeCoordinates[node.id] = { x, y };
-          });
-        };
-
-        this.drawTree = (p, nodeCoordinates) => {
-          p.background(255, 255, 255, 20); // 100 alpha değeri ile beyaz ve %60 opak arka plan
-
-          p.fill(0);
-
-          // Düğümleri çizme
-          for (const id in nodeCoordinates) {
-            const { x, y } = nodeCoordinates[id];
-            p.ellipse(x, y, 20, 20);
-            p.text(id, x - 8, y + 5);
-          }
-
-          // Bağlantıları çizme
-          p.stroke(0);
-          p.strokeWeight(2);
-          for (const id in nodeCoordinates) {
-            const { x, y } = nodeCoordinates[id];
-            const parentNode = this.dataList.find(node => node.id === id);
-            if (parentNode && parentNode.parent_id !== 0) {
-              const { x: parentX, y: parentY } = nodeCoordinates[parentNode.parent_id];
-              p.line(parentX, parentY, x, y);
-            }
-          }
+          this.createNodes(p); // Düğümleri oluştur
+          this.drawBrainstorm(p); // Brainstorm'u çiz
         };
       };
 
@@ -86,12 +49,57 @@ export default {
       this.p5Instance = new p5(sketch);
     },
 
-    redrawFamilyTree() {
+    createNodes(p) {
+      // Düğümleri oluştur
+      const margin = 40;
+      const nodeWidth = 80;
+      const nodeHeight = 40;
+      const startX = margin; // Başlangıç X koordinatı
+      const startY = margin; // Başlangıç Y koordinatı
+
+      this.nodes = [];
+      this.dataList.forEach((node, index) => {
+        const x = startX + (index % 3) * (nodeWidth + margin);
+        const y = startY + Math.floor(index / 3) * (nodeHeight + margin);
+        const color = this.getColor(node.id); // Düğüm rengini belirle
+        this.nodes.push({ id: node.id, parent_id: node.parent_id, x, y, color });
+      });
+    },
+
+    getColor(id) {
+      // Düğüm rengini belirleme fonksiyonu
+      const hue = (id * 137) % 360; // ID'ye dayalı renk oluşturma
+      return `hsl(${hue}, 70%, 70%)`; // HSL renk formatı kullanarak renk oluştur
+    },
+
+    drawBrainstorm(p) {
+      p.background(255); // Beyaz arka plan
+      p.textAlign(p.CENTER, p.CENTER);
+      p.textSize(16);
+
+      // Düğümleri ve bağlantıları çizme
+      this.nodes.forEach(({ id, parent_id, x, y, color }) => {
+        p.fill(color);
+        p.stroke(color);
+        p.ellipse(x, y, 40, 40); // Düğüm çizimi
+        p.fill(0);
+        p.text(id, x, y); // Düğümün üzerine ID yazma
+
+        const parentNode = this.nodes.find(n => n.id === parent_id);
+        if (parentNode) {
+          const parentX = parentNode.x;
+          const parentY = parentNode.y;
+          p.line(parentX, parentY, x, y); // Bağlantı çizimi
+        }
+      });
+    },
+
+    redrawBrainstorm() {
       if (this.p5Instance) {
         // Önceki p5 instance'ını kaldır
         this.p5Instance.remove();
-        // Yeni aile ağacını oluştur
-        this.createFamilyTree();
+        // Yeni brain storm'u oluştur
+        this.createBrainstorm();
       }
     },
   },
