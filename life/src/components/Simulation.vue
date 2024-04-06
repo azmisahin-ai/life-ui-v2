@@ -345,7 +345,7 @@ export default {
       consoleOverlayRef,
       isStartDisabled,
       isStopDisabled,
-      simulationDataList
+      instanceStatusList
     };
   },
 
