@@ -64,7 +64,7 @@ export default {
     },
 
     drawBrainstorm(p) {
-      p.background(255); // Beyaz arka plan
+
       p.textAlign(p.CENTER, p.CENTER);
       p.textSize(16);
 
@@ -81,24 +81,32 @@ export default {
         if (parent_id) {
           const parentNode = this.nodes.find((n) => n.id === parent_id);
           if (parentNode) {
-            // Başlangıç ve bitiş noktalarını belirle
-            const startX = node.x;
-            const startY = node.y;
-            const endX = parentNode.x;
-            const endY = parentNode.y;
+            // Parent düğümün merkez koordinatları
+            const parentX = parentNode.x;
+            const parentY = parentNode.y;
 
-            // Eğri çizgisini çiz
+            // Düğümün merkez koordinatları
+            const nodeX = node.x;
+            const nodeY = node.y;
+
+            // Çizgiyi çiz
             p.noFill();
             p.stroke(parentNode.color);
             p.strokeWeight(2);
-            p.curve(startX, startY, startX, endY, endX, endY, endX, startY);
+
+            // Eğriyi çizmek için yön belirle
+            const curveFactor = 0.5; // Eğri faktörü (0 ile 1 arasında)
+            const curveX1 = nodeX + (parentX - nodeX) * curveFactor;
+            const curveY1 = nodeY + (parentY - nodeY) * curveFactor;
+            const curveX2 = parentX - (parentX - nodeX) * curveFactor;
+            const curveY2 = parentY - (parentY - nodeY) * curveFactor;
+
+            // Eğriyi çiz
+            p.curve(curveX1, curveY1, nodeX, nodeY, parentX, parentY, curveX2, curveY2);
           }
         }
       });
     },
-
-
-
 
 
     redrawBrainstorm() {
