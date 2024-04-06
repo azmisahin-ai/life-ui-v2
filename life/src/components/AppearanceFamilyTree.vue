@@ -44,9 +44,9 @@ export default {
           self.drawBrainstorm(p); // Brainstorm'u çiz
         };
 
-        p.mouseClicked = () => {
-          self.checkClick(p);
-        };
+        // p.mouseClicked = () => {
+        //   self.checkClick(p);
+        // };
       });
     },
 
