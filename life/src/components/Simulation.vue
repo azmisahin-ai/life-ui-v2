@@ -401,39 +401,6 @@ watchEffect(() => {
           </button>
         </div>
 
-        <!-- Simülasyon ayarları -->
-        <div class="widget simulations">
-
-          <div class="tab core">
-            <label for="number_of_instances">Number of Instances: {{ numberOfInstances }}</label>
-            <input name="number_of_instances" type="range" min="1" max="100" step="1" v-model="numberOfInstances"
-              @input="updateValue($event, 'numberOfInstances')"
-              title="Number of samples to be created. The first community created from nothing." />
-            <label for="lifetime_seconds">Lifetime: {{ lifetimeSeconds }}</label>
-            <input name="lifetime_seconds" type="range" min="0.1" max="60.0" step="0.1" v-model="lifetimeSeconds"
-              @input="updateValue($event, 'lifetimeSeconds')"
-              title="The particle's lifetime is in seconds. The assumed lifetime or energy of the particle." />
-            <label for="lifecycle">Lifecycle: {{ lifecycle }}</label>
-            <input name="lifecycle" type="range" min="0.1" max="60.0" step="0.1" v-model="lifecycle"
-              @input="updateValue($event, 'lifecycle')"
-              title="Minute life cycle of the particle. Time management. Examples of time travel of nuclei." />
-            <label for="number_of_replicas">Number of Replicas: {{ numberOfReplicas }}</label>
-            <input name="number_of_replicas" type="range" min="1" max="20" step="1" v-model="numberOfReplicas"
-              @input="updateValue($event, 'numberOfReplicas')"
-              title="Number of copies to be created. When pairing occurs and the limit of new copies to be created." />
-            <label for="number_of_generation">Number of Generations: {{ numberOfGeneration }}</label>
-            <input name="number_of_generation" type="range" min="1" max="10" step="1" v-model="numberOfGeneration"
-              @input="updateValue($event, 'numberOfGeneration')"
-              title="Generation depth. If the maximum throughput is reached or the maximum copy value is 0, it stops replicating." />
-            <label for="max_match_limit">Maximum Match Limit: {{ maxMatchLimit }}</label>
-            <input name="max_match_limit" type="range" min="1" max="10" step="1" v-model="maxMatchLimit"
-              @input="updateValue($event, 'maxMatchLimit')"
-              title="Maximum pairing limit. If any of the cores have been paired before or the maximum limit has been reached, it will skip pairing." />
-          </div>
-
-          <div class="tab particles"></div>
-        </div>
-
         <div class="widget appearance">
           <label>Appearance</label>
           <select v-model="appearance" name="appearance" @change="changeAppearance"
@@ -446,6 +413,51 @@ watchEffect(() => {
 
           </select>
         </div>
+        
+        <!-- Simülasyon ayarları -->
+        <div class="widget simulations">
+
+          <div class="tab core">
+           
+            <label for="number_of_instances">Number of Instances: {{ numberOfInstances }}</label>
+            <input name="number_of_instances" type="range" min="1" max="100" step="1" v-model="numberOfInstances"
+              @input="updateValue($event, 'numberOfInstances')"
+              title="Number of samples to be created. The first community created from nothing." />
+           
+              <label for="lifetime_seconds">Lifetime: {{ lifetimeSeconds }}</label>
+            <input name="lifetime_seconds" type="range" min="0.1" max="60.0" step="0.1" v-model="lifetimeSeconds"
+              @input="updateValue($event, 'lifetimeSeconds')"
+              title="The particle's lifetime is in seconds. The assumed lifetime or energy of the particle." />
+           
+              <label for="lifecycle">Lifecycle: {{ lifecycle }}</label>
+            <input name="lifecycle" type="range" min="0.1" max="60.0" step="0.1" v-model="lifecycle"
+              @input="updateValue($event, 'lifecycle')"
+              title="Minute life cycle of the particle. Time management. Examples of time travel of nuclei." />
+           
+              <label for="number_of_replicas">Number of Replicas: {{ numberOfReplicas }}</label>
+            <input name="number_of_replicas" type="range" min="1" max="20" step="1" v-model="numberOfReplicas"
+              @input="updateValue($event, 'numberOfReplicas')"
+              title="Number of copies to be created. When pairing occurs and the limit of new copies to be created." />
+           
+
+              <label for="max_match_limit">Maximum Match Limit: {{ maxMatchLimit }}</label>
+            <input name="max_match_limit" type="range" min="1" max="10" step="1" v-model="maxMatchLimit"
+              @input="updateValue($event, 'maxMatchLimit')"
+              title="Maximum pairing limit. If any of the cores have been paired before or the maximum limit has been reached, it will skip pairing." />
+          
+              
+              <label for="number_of_generation">Number of Generations: {{ numberOfGeneration }}</label>
+            <input name="number_of_generation" type="range" min="1" max="10" step="1" v-model="numberOfGeneration"
+              @input="updateValue($event, 'numberOfGeneration')"
+              title="Generation depth. If the maximum throughput is reached or the maximum copy value is 0, it stops replicating." />
+            
+            
+            </div>
+
+          <div class="tab particles"></div>
+        </div>
+
+
 
         <div class="widget action">
           <button @click="startSimulation" :disabled="isStartDisabled"
