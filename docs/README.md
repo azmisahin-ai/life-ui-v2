@@ -51,3 +51,6 @@
    ```bash
    cd life-ui-v2
    ```
+
+## Screen
+[Screen](SCREEN.md)
