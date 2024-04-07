@@ -125,7 +125,7 @@ RUN apt-get update && \
 
 # nodejs install
 RUN apt-get update && \
-  curl -fsSL https://deb.nodesource.com/setup_21.x | bash - &&\
+  curl -fsSL https://deb.nodesource.com/setup_20.x | bash - &&\
   apt-get install -y nodejs
 
 # Install development dependencies with npm
